@@ -1,0 +1,43 @@
+<div class="modal fade" id="login">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">欢迎登录</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger text-center hide"></p>
+                <div class="input-group form-group">
+                    <span class="input-group-addon glyphicon glyphicon glyphicon-user"></span>
+                    <input type="text" placeholder="昵称" class="form-control" id="txt_name" />
+                </div>
+                <div class="input-group form-group hide" >
+                    <span class="input-group-addon glyphicon glyphicon glyphicon-envelope"></span>
+                    <input type="text" placeholder="邮箱" class="form-control" id="txt_mail" />
+                </div>
+                <div class="input-group form-group">
+                    <span class="input-group-addon glyphicon glyphicon glyphicon-pencil"></span>
+                    <input type="password" placeholder="密码" class="form-control" id="txt_pwd" />
+                </div>
+                <div class="input-group form-group hide" >
+                    <span class="input-group-addon glyphicon glyphicon glyphicon-lock"></span>
+                    <input type="password" placeholder="重复密码" class="form-control" id="txt_repwd" />
+                </div>
+                <div class="checkbox">
+                    <label for="save">
+                        <input type="checkbox" name="save" value="save"> 下次自动登录
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-redraw" >我要注册</button>
+                <button type="button" class="btn btn-primary btn-submit">登录</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    seajs.use('/js/home/login',function(result){
+        result.run();
+    });
+</script>

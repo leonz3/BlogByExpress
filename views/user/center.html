@@ -1,0 +1,32 @@
+{{> cover}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="page-header"><h2>文章</h2></div>
+            {{#articles}}
+            <div class="media">
+                <div class="media-body">
+                    <a class="media-heading" href="/article/{{ArticleId}}">{{Title}} <small>{{formatDate PublishTime}}</small></a>
+                    <p>{{Intro}}</p>
+                </div>
+                <div class="media-right"></div>
+            </div>
+            <hr/>
+            {{/articles}}
+        </div>
+        <div class="col-md-3">
+            <div class="page-header">
+                <h2>心情</h2>
+            </div>
+            {{#moods}}
+            <div class="media">
+                <div class="media-body">
+                    <span class="pull-right">{{formatDate PublishTime}}</span>
+                    <p>{{Content}}</p>
+                </div>
+            </div>
+            <hr/>
+            {{/moods}}
+        </div>
+    </div>
+</div>

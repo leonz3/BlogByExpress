@@ -1,0 +1,13 @@
+{{> cover}}
+<div class="container">
+    <div class="col-md-9 center-block">
+        <ul class="list-group">
+            {{#articles}}
+            <li class="list-group-item">
+                <a class="badge">删除</a>
+                <h5>{{Title}}<small>{{Describe}}</small></h5>
+            </li>
+            {{/articles}}
+        </ul>
+    </div>
+</div>

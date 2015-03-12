@@ -1,0 +1,22 @@
+{
+  "name": "BlogByExpress",
+  "version": "0.0.1",
+  "authors": [
+    "leon"
+  ],
+  "license": "MIT",
+  "main": "app.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "jquery": "1.11.2",
+    "seajs": "2.3.0",
+    "bootstrap": "3.3.0",
+    "kindeditor": "*",
+    "bootstrap3-validation.js": "https://github.com/mrlong/bootstrap3-validation.js.git",
+    "moment": "~2.9.0"
+  }
+}

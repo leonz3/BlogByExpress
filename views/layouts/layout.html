@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css"/>
+    <script src="/seajs/dist/sea.js"></script>
+    <style>
+        body{padding-top:50px;}
+        .user>img{margin-top:2px;border-radius: 7px;border:1px solid #ddd;background: #e5e5e5}
+        .user>a{margin-left: 40px;}
+        .carousel.col-md-9{padding:0;}
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">blog</a>
+            </div>
+            <ul class="navbar-nav nav">
+                <li class="active"><a href="/1">NodeJS</a></li>
+                <li ><a href="/2">Python</a></li>
+                <li ><a href="/3">Javascript</a></li>
+                <li ><a href="/4">HTML&CSS</a></li>
+                <li ><a href="/5">SQL&Cache</a></li>
+                <li ><a href="/about">About</a></li>
+            </ul>
+            <ul class="navbar-right navbar-nav nav">
+                {{#if user}}
+                <li class="user">
+                    <img src="/img/icon_default_head.png" class="pull-left" width="45" height="45"/>
+                    <a href="/u/{{user.UserId}}">{{user.NickName}}</a></li>
+                <li><a href="/logout" >安全退出</a></li>
+                {{else}}
+                <li><a data-toggle="modal" data-target="#login">登录/注册</a></li>
+                {{/if}}
+            </ul>
+        </div>
+    </div>
+{{{body}}}
+{{> login}}
+</body>
+</html>

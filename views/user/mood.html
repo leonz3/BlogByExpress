@@ -1,0 +1,16 @@
+{{> cover}}
+
+<div class="container">
+    <div class="row col-md-11">
+        {{#moods}}
+        <h3 class="page-header">今天</h3>
+        <div class="media">
+            <div class="media-body">
+                {{Content}}
+            </div>
+            <div class="media-right">{{formatDate PublishTime}}</div>
+        </div>
+        <hr/>
+        {{/moods}}
+    </div>
+</div>

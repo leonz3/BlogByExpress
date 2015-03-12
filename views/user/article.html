@@ -1,0 +1,14 @@
+{{> cover}}
+<div class="container">
+    <div class="row col-md-11">
+        {{#articles}}
+        <div class="media">
+            <div class="media-body">
+                <a class="media-heading" href="/article/{{ArticleId}}">{{Title}}</a>
+                <p>{{Intro}}</p>
+            </div>
+        </div>
+        <hr/>
+        {{/articles}}
+    </div>
+</div>
