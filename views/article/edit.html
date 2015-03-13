@@ -2,7 +2,7 @@
     <div class="row col-md-10">
         <h2 class="page-header">发表文章</h2>
         <div class="form-horizontal">
-            <input type="hidden" name="UserId" id="txt_uid" value="{{user.UserId}}"/>
+            <input type="hidden" name="UserId" id="txt_uid" value="{{self.UserId}}"/>
             <input type="hidden" name="ArticleId" id="txt_aid" value="{{article.ArticleId}}"/>
             <div class="form-group">
                 <input type="text" name="title" class="form-control" id="txt_title" placeholder="文章标题" value="{{article.Title}}"/>

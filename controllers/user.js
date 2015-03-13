@@ -100,7 +100,7 @@ var loginHandler = function(result,req,res,value,key){
 
 //用户登出
 exports.logout = function(req,res){
-    req.session.user = null;
+    req.session.self = null;
     res.clearCookie('self',{});
     return res.redirect('.');
 }

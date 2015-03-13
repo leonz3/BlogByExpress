@@ -2,10 +2,11 @@
 var User = require('../models/user');
 
 exports.autoLogin = function(req,res,next){
-    var username = req.cookies.user || '';
-    if (username && !req.session.user) {
+    var username = req.cookies.self || '';
+    if (username && !req.session.self) {
         User.fetchByName(username, function (result) {
             if (result.length > 0) {
+                console.log(result[0]);
                 req.session.self = new User(result[0]);
             }
         });

@@ -4,13 +4,13 @@
         <div class="form-group">
             <label for="icon" class="col-sm-3 control-label">头像</label>
             <div class="col-sm-8">
-                <img src="{{user.Portrait}}" alt="" width="80" height="80"/>
+                <img src="{{target.Portrait}}" alt="" width="80" height="80"/>
             </div>
         </div>
         <div class="form-group">
             <lable for="nickname" class="col-sm-3 control-label">昵称</lable>
             <div class="col-sm-8">
-                <input type="text" class="form-control txt-name" name="nickname" value="{{user.NickName}}"/>
+                <input type="text" class="form-control txt-name" name="nickname" value="{{target.NickName}}"/>
             </div>
         </div>
         <div class="form-group">
@@ -23,19 +23,19 @@
         <div class="form-group">
             <lable for="Email" class="col-sm-3 control-label">邮箱</lable>
             <div class="col-sm-8">
-                <input type="text" name="Email" class="form-control txt-email" value="{{user.Email}}"/>
+                <input type="text" name="Email" class="form-control txt-email" value="{{target.Email}}"/>
             </div>
         </div>
         <div class="form-group">
             <lable for="location" class="col-sm-3 control-label">所在地</lable>
             <div class="col-sm-8">
-                <input type="text" name="location" class="form-control txt-location" value="{{user.Location}}"/>
+                <input type="text" name="location" class="form-control txt-location" value="{{target.Location}}"/>
             </div>
         </div>
         <div class="form-group">
             <lable for="job" class="col-sm-3 control-label">职业</lable>
             <div class="col-sm-8">
-                <input type="text" name="job" class="form-control txt-job" value="{{user.Job}}"/>
+                <input type="text" name="job" class="form-control txt-job" value="{{target.Job}}"/>
             </div>
         </div>
         <div class="form-group">
@@ -43,9 +43,8 @@
         </div>
     </div>
 </div>
-        <script src="/requirejs/min/require.js" data-main="../../public/js/plugin/config.js"></script>
-<!--<script>-->
-    <!--seajs.use('/js/user/config',function(result){-->
-        <!--result.run();-->
-    <!--})-->
-<!--</script>-->
+<script>
+    seajs.use('/js/user/config',function(result){
+        result.run();
+    })
+</script>
