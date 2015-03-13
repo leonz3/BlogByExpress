@@ -1,12 +1,13 @@
 var home = require('../controllers/home');
 var user = require('../controllers/user');
 var article = require('../controllers/article');
-var util = require('../controllers/util');
+var upload = require('../controllers/upload');
+var checker = require('../filters/login');
 
 module.exports = function (app) {
 
     //index
-    app.get('/', home.auto);
+    app.get('/', checker.autoLogin);
     app.get('/', home.index);
     app.get('/:CategoryId', home.index);
     app.get('/about', home.about);
@@ -17,12 +18,12 @@ module.exports = function (app) {
     app.post('/regist', user.regist);
 
     //user
-    app.get('/u/:id', user.base, user.center);
-    app.get('/u/:id/article', user.base, user.article);
-    app.get('/u/:id/mood', user.base, user.mood);
-    app.get('/u/:id/info', user.base, user.info);
-    app.get('/u/:id/config', user.base, user.config);
-    app.get('/u/:id/collection', user.base, user.collection);
+    app.get('/u/:id', checker.checkTarget, user.center);
+    app.get('/u/:id/article', checker.checkTarget, user.article);
+    app.get('/u/:id/mood', checker.checkTarget, user.mood);
+    app.get('/u/:id/info', checker.checkTarget, user.info);
+    app.get('/u/:id/config', checker.checkTarget, user.config);
+    app.get('/u/:id/collection', checker.checkTarget, user.collection);
 
     //aritcle
     app.get('/article/edit', article.edit);
@@ -34,7 +35,7 @@ module.exports = function (app) {
     //app.post('/article/praise',article.)
 
     //upload
-    app.post('/kindUpload', util.kindUpload);
+    app.post('/kindUpload', upload.kindUpload);
 
     //catch 404 and forward to handler
     app.use(function (req, res, next) {

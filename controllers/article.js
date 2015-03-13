@@ -1,5 +1,5 @@
+
 var Article = require('../models/article');
-var moment = require('moment');
 
 //详细页视图
 exports.detail = function (req, res) {
@@ -7,7 +7,7 @@ exports.detail = function (req, res) {
     Article.fetch(_id, function (result) {
         if (result.length > 0) {
             res.render('article/detail',{
-                user:req.session.user,
+                self:req.session.self,
                 article:result[0]
             });
         }else{
@@ -24,14 +24,14 @@ exports.edit = function (req, res) {
         Article.fetch(_id, function (result) {
             if (result.length > 0) {
                 res.render('article/edit', {
-                    user: req.session.user,
+                    self: req.session.self,
                     article: result[0]
                 })
             }
         });
     } else {
         res.render('article/edit', {
-            user: req.session.user
+            self: req.session.self
         });
     }
 }

@@ -1,3 +1,4 @@
+
 var db = require('../config/database');
 
 var Mood = function (mood) {

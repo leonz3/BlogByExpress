@@ -8,21 +8,21 @@
                         <img class="media-object" src="{{user.Portrait}}" width="120" height="120">
                     </div>
                     <div class="media-body media-middle">
-                        <h2 class="media-heading">{{user.NickName}}</h2>
-                        <p>性别：<span>{{getGender user.Gender}}</span></p>
+                        <h2 class="media-heading">{{target.NickName}}</h2>
+                        <p>性别：<span>{{getGender target.Gender}}</span></p>
                     </div>
                 </div>
             </div>
             <hr/>
             <div class="row">
-                <div class="col-md-4">Email：<span>{{user.Email}}</span></div>
-                <div class="col-md-5">所在地区：<span>{{user.Location}}</span></div>
+                <div class="col-md-4">Email：<span>{{target.Email}}</span></div>
+                <div class="col-md-5">所在地区：<span>{{target.Location}}</span></div>
                 <div class="col-md-9">职业：<span></span></div>
             </div>
             <hr/>
             <div class="row">
-                <div class="col-md-4">注册时间：<span>{{formatDate user.RegTime}}</span></div>
-                <div class="col-md-8">最后登录时间：<span>{{formatDate User.LastLogTime}}</span></div>
+                <div class="col-md-4">注册时间：<span>{{formatDate target.RegTime}}</span></div>
+                <div class="col-md-8">最后登录时间：<span>{{formatDate target.LastLogTime}}</span></div>
                 <div class="col-md-4">文章：<span></span></div>
                 <div class="col-md-4">心情：<span></span></div>
                 <div class="col-md-4">回复：<span></span></div>

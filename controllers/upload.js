@@ -1,13 +1,7 @@
-var fs = require('fs');
-var crypto = require('crypto');
+
+//var fs = require('fs');
 //var formidable = require('formidable');
 var multer = require('multer');
-var moment = require('moment');
-
-exports.getMd5 = function (val) {
-    var md5 = crypto.createHash('md5');
-    return md5.update(val).digest('base64');
-}
 
 //通过multer上传
 exports.imgUpload = function () {
@@ -42,19 +36,6 @@ exports.kindUpload = function (req, res) {
     //        });
     //    }
     //});
-}
-
-
-exports.formatDate = function (date) {
-    return moment(date).format('YYYY-MM-DD hh:mm:ss');
-}
-
-exports.setDefault = function (currVal, defVal) {
-    return currVal ? currVal : defVal;
-}
-
-exports.getGender = function(val){
-    return parseInt(val) === 1?"男":"女";
 }
 
 
