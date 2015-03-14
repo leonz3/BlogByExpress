@@ -1,6 +1,4 @@
-/**
- * Created by leon on 2015/2/5.
- */
+
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var livereload = require('gulp-livereload');

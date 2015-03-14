@@ -29,7 +29,7 @@
             <ul class="navbar-right navbar-nav nav">
                 {{#if self}}
                 <li class="user">
-                    <img src="/img/icon_default_head.png" class="pull-left" width="45" height="45"/>
+                    <img src="{{self.Portrait}}" class="pull-left" width="45" height="45"/>
                     <a href="/u{{self.UserId}}">{{self.NickName}}</a></li>
                 <li><a href="/logout" >安全退出</a></li>
                 {{else}}

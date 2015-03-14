@@ -9,6 +9,7 @@ var Article = function (article) {
     this.ScanTimes = article.ScanTimes || 0;
     this.CategoryId = article.CategoryId;
     this.Intro = article.Intro;
+    this.Source = article.Source;
 }
 
 //通过文章ID获取单篇文章
@@ -59,21 +60,32 @@ Article.fetchsByCategory = function (cid, index, callback) {
 
 //新增，修改文章
 Article.prototype.save = function (callback) {
-    if (this.ArticleId) {
-        var _sql = 'update articles set title=?,content=?,scantimes=?,categoryid=?,intro=? where articleid=?';
-        var _vals = [this.Title, this.Content, this.ScanTimes, this.CategoryId, this.Intro, this.UserId];
-    } else {
-        var _sql = 'insert into articles(title,content,publishtime,scantimes,categoryid,userid,intro) values(?,?,?,?,?,?,?)';
-        var _vals = [this.Title, this.Content, this.PublishTime, this.ScanTimes, this.CategoryId, this.UserId, this.Intro];
+    if(this.ArticleId){
+        var _sql = 'update articles set title=?,content=?,scantimes=?,categoryid=?,intro=?,source=? where articleid=? and userid=?';
+        var _val = [this.Title, this.Content, this.ScanTimes, this.CategoryId, this.Intro,this.Source,this.ArticleId, this.UserId];
+    }else{
+        var _sql = 'insert into articles(title,content,publishtime,scantimes,categoryid,userid,intro,source) values(?,?,?,?,?,?,?,?)';
+        var _val = [this.Title, this.Content, this.PublishTime, this.ScanTimes, this.CategoryId, this.UserId, this.Intro,this.Source];
     }
     db.execute({
         sql: _sql,
-        values: _vals,
+        values: _val,
         handler: function (result) {
             callback(result);
         }
     })
 };
+
+//删除文章
+Article.delete = function(aid,uid,callback){
+    db.execute({
+        sql:'delete from articles where ArticleId=? And UserId=?',
+        values:[aid,uid],
+        handler:function(result){
+            callback(result);
+        }
+    })
+}
 
 //收藏文章
 Article.upCollection = function(desc,uid,aid,callback){

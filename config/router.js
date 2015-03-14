@@ -1,3 +1,4 @@
+
 var home = require('../controllers/home');
 var user = require('../controllers/user');
 var article = require('../controllers/article');
@@ -29,6 +30,7 @@ module.exports = function (app) {
     app.get('/article/:id', article.detail);
     app.get('/article/edit/:id', article.edit);
     app.post('/article/save', article.save);
+    app.delete('/article/:id',article.delete);
     app.post('/article/collect',article.upCollection);
     app.delete('/aricle/collect',article.downCollection);
     app.post('/article/praise',article.upPraise);

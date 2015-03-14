@@ -39,11 +39,13 @@ exports.edit = function (req, res) {
 //文章发布
 exports.save = function (req, res) {
     var article = new Article({
+        ArticleId:req.body.aid,
         Title: req.body.title,
         Content: req.body.content,
         Intro:req.body.intro,
         UserId: req.body.uid,
         CategoryId: req.body.cid,
+        Source:req.body.source,
         PublishTime: new Date()
     });
     article.save(function (result) {
@@ -51,6 +53,15 @@ exports.save = function (req, res) {
             res.send({status:'success',insertId:result.insertId});
         } else {
             res.send({status:'error'});
+        }
+    });
+}
+
+//文章删除
+exports.delete = function(req,res){
+    Article.delete(req.body.aid,req.body.uid,function(result){
+        if(result.affectedRows>0){
+            res.send('success');
         }
     });
 }

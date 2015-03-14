@@ -1,17 +1,26 @@
 define(function(require,exports,moudle){
     var $ = require('jquery');
+    var $slc = $('#slc_cid');
     var Article = {
         store:{}
         ,getData:function(){
             this.store = {
                 uid:function(){
-                    return $('#txt_uid').val().trim() || '';
+                    var _val = $('#txt_uid').val().trim();
+                    if(_val){
+                        return _val;
+                    }else{
+                        throw  new Error();
+                    }
                 }(),
                 aid:function(){
-                   return $('#txt_aid').val().trim() || '';
+                    return $('#txt_aid').val().trim();
                 }(),
                 cid:function(){
-                    return $('#slc_cid').val().trim();
+                    return $slc.val();
+                }(),
+                source:function(){
+                    return $(':radio:checked').val();
                 }(),
                 title:function(){
                     var _val = $('#txt_title').val().trim();
@@ -41,6 +50,7 @@ define(function(require,exports,moudle){
             }catch(e){
                 return ;
             }
+            console.log(_this.store)
             $.ajax({
                 url:'/article/save',
                 type:'post',
@@ -54,6 +64,14 @@ define(function(require,exports,moudle){
         }
     }
     exports.run = function(){
+        var cid = $slc.attr('data-category');
+        $slc.val(cid);
+        var source = $('#chk_source').attr('data-source');
+        $(':radio').each(function(){
+            if(this.value == source){
+                this.checked = true;
+            }
+        })
         $('#btn_save').on('click',function(){
             Article.submit();
         });
