@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
-var viewHelper = require('./utils/views_helper');
+var viewHelper = require('./utils/htmlHelper');
 var upload = require('./controllers/upload');
 
 var app = express();
