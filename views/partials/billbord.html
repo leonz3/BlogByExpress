@@ -7,18 +7,18 @@
     <li ><a href="/about">About</a></li>
 </ul>
 <div class="panel panel-default">
-    <div class="panel-heading">排行</div>
+    <div class="panel-heading">本周评论排行榜</div>
     <div class="panel-body list-group">
-        <a class="list-group-item" href="#"></a>
-        <a class="list-group-item" href="#"></a>
-        <a class="list-group-item" href="#"></a>
+        {{#commentList}}
+        <a class="list-group-item" href="/article/{{ArticleId}}">{{Title}}</a>
+        {{/commentList}}
     </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">点击排行榜</div>
+    <div class="panel-heading">本周浏览排行榜</div>
     <div class="panel-body list-group">
-        {{#scanbord}}
+        {{#hitList}}
         <a class="list-group-item" href="/article/{{ArticleId}}">{{Title}}</a>
-        {{/scanbord}}
+        {{/hitList}}
     </div>
 </div>

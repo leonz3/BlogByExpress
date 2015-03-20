@@ -1,21 +1,26 @@
 
 var Article = require('../models/article');
 var Comment = require('../models/comment');
+var homeController = require('./home');
 
 //详细页视图
 exports.detail = function (req, res) {
     var _id = req.params.id;
     Article.fetch(_id, function (result1) {
         Comment.fetchsByRootId(_id,function(result2){
-            if (result1.length > 0) {
-                res.render('article/detail',{
-                    self:req.session.self,
-                    article:result1[0],
-                    comments:result2
-                });
-            }else{
-                return res.redirect('/');
-            }
+            homeController.getBordByDays(7,function(result3,result4){
+                if (result1.length > 0) {
+                    res.render('article/detail',{
+                        self:req.session.self,
+                        article:result1[0],
+                        comments:result2,
+                        hitList:result3,
+                        commentList:result4
+                    });
+                }else{
+                    return res.redirect('/');
+                }
+            })
         });
     });
 }

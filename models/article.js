@@ -61,7 +61,7 @@ Article.fetchsByCategory = function (cid, index, callback) {
 //关键字搜索
 Article.fetchsByKey = function(key, callback){
     db.execute({
-        sql:'select * from articles where title like "%' + key + '%" or intro like "%' + key + '%"',
+        sql:'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId=u.UserId where a.Title like "%' + key + '%" or a.Intro like "%' + key + '%"',
         handler:function(result){
             callback(result);
         }
@@ -130,16 +130,26 @@ Article.upPraise = function(uid,aid,callback){
     });
 }
 
-//取得点击排行榜
-Article.getScanbord = function(date,callback){
+//获取点击排行榜
+Article.getHitList = function(period,callback){
     db.execute({
         sql:'select ArticleId,Title from articles where PublishTime>? order by Scantimes desc limit 0,10',
-        values:[date],
+        values:[period],
         handler:function(result){
             callback(result);
         }
     });
-}
+};
 
+//获取评论排行榜
+Article.getCommentList = function(period,callback){
+    db.execute({
+        sql:'select a.ArticleId,a.Title from articles a left join (select RootId as ArticleId,Count(CommentId) as Comments from comments group by RootId) c on a.ArticleId=c.ArticleId where a.PublishTime>? order by c.Comments desc limit 0,10',
+        values:[period],
+        handler:function(result){
+            callback(result);
+        }
+    });
+};
 
 module.exports = Article;

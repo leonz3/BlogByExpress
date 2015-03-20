@@ -1,3 +1,8 @@
+/* layout */
+body{padding-top:50px;}
+.navbar-nav .user>img{margin-top:2px;border-radius: 7px;border:1px solid #ddd;background: #e5e5e5}
+.navbar-nav .user>a{margin-left: 40px;}
+
 /* index */
 #carousel{margin-top:18px;}
 .input-group .glyphicon{top:0;}
@@ -19,7 +24,10 @@
 .panel .list-group a{padding:5px 8px;}
 
 /* Article detail*/
-.title-article .help-block{font-size:13px;margin-top:8px;}
+.article-title .help-block{font-size:13px;margin-top:8px;}
+.article-btns div{margin-right:12px;display: inline-block;border:1px solid #ddd;}
+.article-btns div a{top:2px;font-size: 20px}
+.article-btns div p{margin: 0;border-top:1px solid #ddd;line-height: 25px}
 .list-comments .media-left img{width:50px;height:50px;border-radius:5px;}
 
 

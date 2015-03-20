@@ -1,16 +1,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <h2 class="page-header title-article">
+            <h2 class="page-header article-title">
                 {{article.Title}}
                 <small class="help-block">发表于<span>{{formatDate article.PublishTime}}</span>, 点击<span>{{article.ScanTimes}}</span>次, 评论<span>{{setDefault article.Comments 0}}</span>条</small>
             </h2>
             <div>
                 {{{article.Content}}}
             </div>
-            <div class="text-center">
-                <a href="javascript:void(0)" id="btn_collect">收藏</a>
-                <a href="javascript:void(0)" id="btn_praise">点赞</a>
+            <div class="text-center article-btns">
+                <div>
+                    <a href="javascript:void(0)" class="btn btn-collect glyphicon glyphicon-star" title="收藏"></a>
+                    <p>10</p>
+                </div>
+                <div>
+                    <a href="javascript:void(0)" class="btn btn-praise glyphicon glyphicon-heart" title="点赞"></a>
+                    <p>10</p>
+                </div>
             </div>
             <div >
                 <h4 class="page-header">评论

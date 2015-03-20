@@ -7,36 +7,46 @@ exports.index = function (req, res,next) {
     if (_cid && isNaN(parseInt(_cid))) {
         next();
     } else {
-        var _date = moment().subtract(7, 'days').format();
+        console.log(req.session.self)
         Article.fetchsByCategory(_cid, 1, function (result1) {
-            Article.getScanbord(_date,function(result2){
+            getBordByDays(7, function (result2,result3) {
                 res.render('home/index', {
                     self: req.session.self,
                     articles: result1,
-                    scanbord:result2
+                    hitList:result2,
+                    commentList:result3
                 });
             });
         });
     }
-}
+};
 
 exports.about = function (req, res) {
     res.render('home/index',{
         self:req.session.self
     });
-}
+};
 
 exports.search = function(req,res){
     var _key = req.params.key;
-    var _date = moment().subtract(7, 'days').format();
     Article.fetchsByKey(_key,function(result1){
-        Article.getScanbord(_date,function(result2){
+        getBordByDays(7,function(result2,result3){
             res.render('home/index',{
                 self:req.session.self,
                 articles:result1,
-                scanbord:result2
-            })
+                hitList:result2,
+                commentList:result3
+            });
 
-        })
+        });
     });
-}
+};
+
+var getBordByDays = exports.getBordByDays = function(days,callback){
+    var _days = moment().subtract(days, 'days').format();
+    Article.getHitList(_days,function(hits){
+       Article.getCommentList(_days,function(comments){
+            callback(hits,comments);
+       });
+    });
+};

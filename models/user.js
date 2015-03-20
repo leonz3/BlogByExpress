@@ -6,6 +6,7 @@ var User = function(user){
     this.NickName = user.NickName;
     this.Email = user.Email;
     this.Password = user.Password;
+    this.Portrait = user.Portrait;
 };
 
 //新增用户
@@ -50,7 +51,7 @@ User.fetchByMail = function(mail,callback){
 //通过ID查看用户信息
 User.getInfo = function(id,callback){
     db.execute({
-        sql:'select u.UserId,u.NickName,u.Email,u.Portrait,i.Gender,i.RegTime,i.Job,i.Location from users u left join user_info i on u.UserId=i.UserId where u.userId=?;',
+        sql:'select u.UserId,u.NickName,u.Email,u.Portrait,i.Gender,i.RegTime,i.Job,i.Location,m.Moods,c.Comments,a.Articles from users u left join user_info i on u.UserId=i.UserId left join (select UserId,count(ArticleId) as articles from articles group by UserId) a on u.UserId=a.UserId left join (select UserId,count(MoodId) as moods from user_moods group by UserId) m on u.UserId=m.UserId left join (select UserId,count(CommentId) as comments from comments group by UserId) c on u.UserId=c.UserId where u.userId=?',
         values:[id],
         handler:function(result){
             callback(result);
