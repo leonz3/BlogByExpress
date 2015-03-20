@@ -39,7 +39,7 @@ Article.fetchsByUser = function (uid, index, callback) {
 
 //分类分页获取所有用户文章
 Article.fetchsByCategory = function (cid, index, callback) {
-    var _sql = 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait from articles a left join users u on a.UserId = u.UserId'
+    var _sql = 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId = u.UserId'
     var start = ~~index === 1 ? 0 : 20 + (index - 2) * 10;
     var end = ~~index === 1 ? start + 20 : start + 10;
     if (cid) {
@@ -56,6 +56,16 @@ Article.fetchsByCategory = function (cid, index, callback) {
             callback(result);
         }
     });
+}
+
+//关键字搜索
+Article.fetchsByKey = function(key, callback){
+    db.execute({
+        sql:'select * from articles where title like "%' + key + '%" or intro like "%' + key + '%"',
+        handler:function(result){
+            callback(result);
+        }
+    })
 }
 
 //新增，修改文章
@@ -119,5 +129,17 @@ Article.upPraise = function(uid,aid,callback){
         }
     });
 }
+
+//取得点击排行榜
+Article.getScanbord = function(date,callback){
+    db.execute({
+        sql:'select ArticleId,Title from articles where PublishTime>? order by Scantimes desc limit 0,10',
+        values:[date],
+        handler:function(result){
+            callback(result);
+        }
+    });
+}
+
 
 module.exports = Article;

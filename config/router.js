@@ -11,6 +11,7 @@ module.exports = function (app) {
     app.get('/', checker.autoLogin,home.index);
     app.get('/:CategoryId', home.index);
     app.get('/about', home.about);
+    app.get('/search/:key',home.search);
 
     //log & regist
     app.get('/logout', user.logout);

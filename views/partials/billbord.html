@@ -1,3 +1,11 @@
+<ul class="nav list-category">
+    <li ><a href="/1"><span class="glyphicon glyphicon-menu-left pull-left"></span>NodeJS</a></li>
+    <li ><a href="/2">Python</a></li>
+    <li ><a href="/3">Javascript</a></li>
+    <li ><a href="/4">HTML&CSS</a></li>
+    <li ><a href="/5">SQL&Cache</a></li>
+    <li ><a href="/about">About</a></li>
+</ul>
 <div class="panel panel-default">
     <div class="panel-heading">排行</div>
     <div class="panel-body list-group">
@@ -7,10 +15,10 @@
     </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">排行</div>
+    <div class="panel-heading">点击排行榜</div>
     <div class="panel-body list-group">
-        <a class="list-group-item" href="#"></a>
-        <a class="list-group-item" href="#"></a>
-        <a class="list-group-item" href="#"></a>
+        {{#scanbord}}
+        <a class="list-group-item" href="/article/{{ArticleId}}">{{Title}}</a>
+        {{/scanbord}}
     </div>
 </div>

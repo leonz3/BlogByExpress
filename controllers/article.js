@@ -1,18 +1,22 @@
 
 var Article = require('../models/article');
+var Comment = require('../models/comment');
 
 //详细页视图
 exports.detail = function (req, res) {
     var _id = req.params.id;
-    Article.fetch(_id, function (result) {
-        if (result.length > 0) {
-            res.render('article/detail',{
-                self:req.session.self,
-                article:result[0]
-            });
-        }else{
-            return res.redirect('/');
-        }
+    Article.fetch(_id, function (result1) {
+        Comment.fetchsByRootId(_id,function(result2){
+            if (result1.length > 0) {
+                res.render('article/detail',{
+                    self:req.session.self,
+                    article:result1[0],
+                    comments:result2
+                });
+            }else{
+                return res.redirect('/');
+            }
+        });
     });
 }
 

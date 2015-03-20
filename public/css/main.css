@@ -1,0 +1,26 @@
+/* index */
+#carousel{margin-top:18px;}
+.input-group .glyphicon{top:0;}
+.navbar .input-group{border: 1px solid #ddd;border-radius:6px;width:250px;}
+.navbar .input-group input,.navbar .input-group span a{border:none;background:transparent;outline:none;box-shadow:unset;color:#666}
+.list-articles hr{margin:10px;}
+.list-articles .media-left a img{border-radius:5px;}
+.list-articles .media-left a span{display: block;width:60px;text-align:center;font:12px/20px "Microsoft YaHei";}
+.list-articles .media-body a{font:17px/30px "Microsoft YaHei";color:#444}
+.list-articles .media-body p{color:#666;}
+
+/* billbord */
+.list-category{margin: 20px auto 10px;}
+.list-category{width:100%;border:1px solid #ddd;}
+.list-category li{width: 100%;text-align:center;border-bottom:1px  solid #ddd;padding:0;}
+.list-category li:last-child{border: none;}
+.list-category li a{color:#777}
+.panel .list-group{padding:0;}
+.panel .list-group a{padding:5px 8px;}
+
+/* Article detail*/
+.title-article .help-block{font-size:13px;margin-top:8px;}
+.list-comments .media-left img{width:50px;height:50px;border-radius:5px;}
+
+
+

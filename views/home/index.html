@@ -1,55 +1,52 @@
 <div class="container">
     <div class="row">
-        <div id="carousel" class="carousel slide col-md-9 " data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carousel" data-slide-to="0"></li>
-                <li data-target="#carousel" data-slide-to="1"></li>
-                <li data-target="#carousel" data-slide-to="2"></li>
-                <li data-target="#carousel" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="item active">
-                    <img src="img/banner_1.jpg" alt=""/>
-                </div>
-                <div class="item">
-                    <img src="img/banner_2.jpg" alt=""/>
-                </div>
-                <div class="item">
-                    <img src="img/banner_3.jpg" alt=""/>
-                </div>
-                <div class="item">
-                    <img src="img/banner_4.jpg" alt=""/>
-                </div>
-            </div>
-            <a class="left carousel-control" href="#carousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left" ></span>
-            </a>
-            <a class="right carousel-control" href="#carousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" ></span>
-            </a>
-        </div>
-        <!--<div class="col-md-3 form-inline">-->
-            <!--<input type="text" placeholder="搜索" class="form-control">-->
-            <!--<input type="button" class="btn btn-default" value="搜索"/>-->
-        <!--</div>-->
-    </div>
-    <hr/>
-    <div class="row">
         <div class="col-md-9">
-            {{#articles}}
-            <div class="media">
-                <div class="media-left">
-                    <a href="/u{{UserId}}">
-                        <img class="media-object" src="{{Portrait}}" width="60" height="60">
-                    </a>
+            <div id="carousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel" data-slide-to="0"></li>
+                    <li data-target="#carousel" data-slide-to="1"></li>
+                    <li data-target="#carousel" data-slide-to="2"></li>
+                    <li data-target="#carousel" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="img/banner_1.jpg" alt=""/>
+                    </div>
+                    <div class="item">
+                        <img src="img/banner_2.jpg" alt=""/>
+                    </div>
+                    <div class="item">
+                        <img src="img/banner_3.jpg" alt=""/>
+                    </div>
+                    <div class="item">
+                        <img src="img/banner_4.jpg" alt=""/>
+                    </div>
                 </div>
-                <div class="media-body">
-                    <a class="media-heading" href="/article/{{ArticleId}}">{{Title}}</a>
-                    <p>{{Intro}}...</p>
-                </div>
+                <a class="left carousel-control" href="#carousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" ></span>
+                </a>
+                <a class="right carousel-control" href="#carousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" ></span>
+                </a>
             </div>
             <hr/>
-            {{/articles}}
+            <div class="list-articles">
+                {{#articles}}
+                <div class="media">
+                    <div class="media-left">
+                        <a href="/u{{UserId}}">
+                            <img class="media-object" src="{{Portrait}}" width="60" height="60">
+                            <span>{{NickName}}</span>
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <a class="media-heading" href="/article/{{ArticleId}}">{{Title}}</a>
+                        <p>{{Intro}}...</p>
+                    </div>
+                </div>
+                <hr/>
+                {{/articles}}
+            </div>
         </div>
         <div class="col-md-3">
             {{> billbord}}
