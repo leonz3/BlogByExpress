@@ -1,11 +1,5 @@
 define(function(require,exports,module){
     var $ = require('jquery');
-    var avalon = require('avalon');
-    console.log(avalon);
-
-    var test = avalon.define('avalon',function(vm){
-        console.log(vm)
-    })
 
     $.fn.getValue = function(){
         return this.value || this.defaultValue;

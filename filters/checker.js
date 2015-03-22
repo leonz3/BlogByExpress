@@ -22,3 +22,8 @@ exports.checkTarget = function(req,res,next){
         }
     });
 }
+
+exports.isSelf = function(req,res,next){
+    req.session.isSelf = req.session.target.UserId === req.session.self.UserId?1:0;
+    next();
+}

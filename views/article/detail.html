@@ -1,21 +1,21 @@
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <h2 class="page-header article-title">
+            <h2 class="page-header article-title" data-id="{{article.ArticleId}}">
                 {{article.Title}}
-                <small class="help-block">发表于<span>{{formatDate article.PublishTime}}</span>, 点击<span>{{article.ScanTimes}}</span>次, 评论<span>{{setDefault article.Comments 0}}</span>条</small>
+                <small class="help-block">发表于<span>{{formatDate article.PublishTime}}</span>, 点击<span>{{article.ScanTimes}}</span>次, 评论<span class="commnet-nums">{{setDefault article.Comments 0}}</span>条</small>
             </h2>
             <div>
                 {{{article.Content}}}
             </div>
             <div class="text-center article-btns">
                 <div>
-                    <a href="javascript:void(0)" class="btn btn-collect glyphicon glyphicon-star" title="收藏"></a>
-                    <p>10</p>
+                    <a href="javascript:void(0)" class="btn btn-collect glyphicon glyphicon-star" data-toggle="tooltip" data-placement="left" title="收藏"></a>
+                    <p class="collection-nums">{{setDefault CollectNums.nums 0}}</p>
                 </div>
                 <div>
-                    <a href="javascript:void(0)" class="btn btn-praise glyphicon glyphicon-heart" title="点赞"></a>
-                    <p>10</p>
+                    <a href="javascript:void(0)" class="btn btn-praise glyphicon glyphicon-heart" data-toggle="tooltip" data-placement="right" title="点赞"></a>
+                    <p class="praise-nums">{{setDefault PraiseNums.nums 0}}</p>
                 </div>
             </div>
             <div >
@@ -69,13 +69,14 @@
                     {{/comments}}
                 </ul>
             </div>
+            <hr/>
             <div class="">
                 <div class="col-sm-1">
                     <img src="" alt="" width="60" height="60"/>
                 </div>
                 <div class="col-sm-11">
                     <textarea name="comment" id="txt_comment" class="form-control" rows="5"></textarea>
-                    <button class="btn btn-default pull-right">回复</button>
+                    <button class="btn btn-default pull-right btn-comment">回复</button>
                 </div>
             </div>
         </div>
@@ -84,4 +85,9 @@
         </div>
     </div>
 </div>
-        {{> popup}}
+{{> popup}}
+<script>
+    seajs.use('/js/article/detail',function(result){
+        result.run();
+    });
+</script>

@@ -7,7 +7,7 @@ var Comment = function(comment){
     this.UserId = comment.UserId;
     this.RootId = comment.RootId;
     this.ParentId = comment.ParentId || null;
-    this.publishTime = comment.publishTime || new Date();
+    this.PublishTime = comment.PublishTime || new Date();
 };
 
 Comment.fetchsByRootId = function(rid,callback){
@@ -24,6 +24,16 @@ Comment.prototype.save = function(callback){
     db.execute({
         sql:'insert into comments(Content,PublishTime,UserId,RootId,ParentId) values(?,?,?,?,?)',
         values:[this.Content,this.PublishTime,this.UserId,this.RootId,this.ParentId],
+        handler:function(result){
+            callback(result);
+        }
+    });
+};
+
+Comment.delete = function(aid,uid,callback){
+    db.execute({
+        sql:'delete from comments where RootId=? AND UserId=?',
+        values:[aid,uid],
         handler:function(result){
             callback(result);
         }

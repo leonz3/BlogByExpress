@@ -1,7 +1,7 @@
 {{> cover}}
 <div class="container">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-9 list-articles">
             <div class="page-header"><h2>文章</h2></div>
             {{#articles}}
             <div class="media">
@@ -18,15 +18,14 @@
             <div class="page-header">
                 <h2>心情</h2>
             </div>
+            <ul class="list-unstyled list-moods">
             {{#moods}}
-            <div class="media">
-                <div class="media-body">
-                    <span class="pull-right">{{formatDate PublishTime}}</span>
+                <li>
                     <p>{{Content}}</p>
-                </div>
-            </div>
-            <hr/>
+                    <p class="">{{formatDate PublishTime}}</p>
+                </li>
             {{/moods}}
+            </ul>
         </div>
     </div>
 </div>

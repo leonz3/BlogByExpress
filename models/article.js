@@ -152,4 +152,48 @@ Article.getCommentList = function(period,callback){
     });
 };
 
+//获取文章的点赞数量
+Article.prototype.getPraiseNums = function(callback){
+    db.execute({
+        sql:'select count(UserId) as nums from user_article_praise where ArticleId=? group by ArticleId',
+        values:[this.ArticleId],
+        handler:function(result){
+            callback(result);
+        }
+    });
+};
+
+//获取文章的收藏数量
+Article.prototype.getCollectNums = function(callback){
+    db.execute({
+        sql:'select count(UserId) as nums from user_article_collections where ArticleId=? group by ArticleId',
+        values:[this.ArticleId],
+        handler:function(result){
+            callback(result);
+        }
+    });
+};
+
+//是否被用户收藏
+Article.prototype.isPraisedByUser = function(uid){
+    db.execute({
+        sql:'select UserId from user_article_praise where UserId=? and ArticleId=?',
+        values:[uid,this.ArticleId],
+        handler:function(result){
+            return result.length > 0 ? true : false;
+        }
+    });
+};
+
+//是否被用户点赞
+Article.prototype.isCollectedByUser = function(uid){
+    db.execute({
+        sql:'select UserId from user_article_collections where UserId=? and ArticleId=?',
+        values:[uid,this.ArticleId],
+        handler:function(result){
+            return result.length > 0 ? true : false;
+        }
+    });
+};
+
 module.exports = Article;

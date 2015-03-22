@@ -47,15 +47,19 @@ exports.info = function(req,res){
         res.render('user/info',{
             self:req.session.self,
             target:result[0]
-        })
+        });
     });
-}
+};
 
-exports.config = function(req,res){
+exports.config = function(req,res,next){
+    if(!req.session.isSelf){
+        next();
+    }
     res.render('user/config',{
-        self:req.session.self
+        self:req.session.self,
+        target:req.session.target
     });
-}
+};
 
 exports.collection = function(req,res){
     var target = req.session.target;

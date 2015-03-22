@@ -24,7 +24,7 @@ module.exports = function (app) {
     app.get('/u:id/mood', checker.checkTarget, user.mood);
     app.get('/u:id/info', checker.checkTarget, user.info);
     app.get('/u:id/config', checker.checkTarget, user.config);
-    app.get('/u:id/collection', checker.checkTarget, user.collection);
+    app.get('/u:id/collection', checker.checkTarget,checker.isSelf,user.collection);
 
     //aritcle
     app.get('/article/edit', article.edit);
@@ -35,6 +35,8 @@ module.exports = function (app) {
     app.post('/article/collect',article.upCollection);
     app.delete('/aricle/collect',article.downCollection);
     app.post('/article/praise',article.upPraise);
+    app.post('/comment',article.upComment);
+    app.delete('/comment',article.downComment);
 
     //upload
     app.post('/kindUpload', upload.kindUpload);

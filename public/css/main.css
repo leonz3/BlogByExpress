@@ -1,7 +1,12 @@
 /* layout */
 body{padding-top:50px;}
 .navbar-nav .user>img{margin-top:2px;border-radius: 7px;border:1px solid #ddd;background: #e5e5e5}
-.navbar-nav .user>a{margin-left: 40px;}
+.navbar-nav .user>a{margin-left: 45px;}
+.navbar-right>li>a{padding:15px 10px;}
+.navbar-right>li>.glyphicon{font-size:20px;}
+.navbar-right .dropdown-menu{padding:0;}
+.navbar-right .dropdown-menu>li:first-child{border-bottom: 1px solid #dde;}
+.navbar-right .dropdown-menu>li>a{line-height: 27px;}
 
 /* index */
 #carousel{margin-top:18px;}
@@ -25,10 +30,34 @@ body{padding-top:50px;}
 
 /* Article detail*/
 .article-title .help-block{font-size:13px;margin-top:8px;}
-.article-btns div{margin-right:12px;display: inline-block;border:1px solid #ddd;}
-.article-btns div a{top:2px;font-size: 20px}
-.article-btns div p{margin: 0;border-top:1px solid #ddd;line-height: 25px}
+.article-btns>div{margin-right:12px;display: inline-block;border:1px solid #ddd;}
+.article-btns>div a{top:2px;font-size: 20px}
+.article-btns>div a:hover,.article-btns div a:active,.article-btns div a:focus{color:#999;}
+.article-btns>div p{margin: 0;border-top:1px solid #ddd;line-height: 25px}
 .list-comments .media-left img{width:50px;height:50px;border-radius:5px;}
+
+/* cover */
+.jumbotron{position: relative;padding:60px 0 0;}
+.jumbotron .container{margin-bottom: -20px;}
+.jumbotron .media .media-body{padding-left: 10px;vertical-align: bottom;}
+.jumbotron .media .media-body h3{font-size:30px;color:#777}
+.jumbotron .media .media-body p{font-size:16px;color:#999}
+.jumbotron .nav{margin-top: 15px;}
+.jumbotron .nav li{width:80px}
+.jumbotron .nav li a{line-height: 40px;text-align: center;}
+
+/* user center */
+.list-moods li{border-bottom:1px solid #ddd;}
+.list-moods p:first-child{margin-top: 10px;}
+.list-moods p:last-child{margin-bottom:5px;color:#999;line-height: 1;font-size:12px;}
+
+
+
+
+
+
+
+
 
 
 

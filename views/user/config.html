@@ -4,7 +4,8 @@
         <div class="form-group">
             <label for="icon" class="col-sm-3 control-label">头像</label>
             <div class="col-sm-8">
-                <img src="{{target.Portrait}}" alt="" width="80" height="80"/>
+                <img src="{{target.Portrait}}" width="80" height="80"/>
+                <input type="button" class="btn btn-default btn-upload" value="修改" />
             </div>
         </div>
         <div class="form-group">
@@ -46,5 +47,5 @@
 <script>
     seajs.use('/js/user/config',function(result){
         result.run();
-    })
+    });
 </script>
