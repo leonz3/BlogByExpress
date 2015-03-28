@@ -9,3 +9,6 @@ public/libs
 
 # mysql connect params file
 config/mysql_config.json
+
+#Hbuilder files
+.project

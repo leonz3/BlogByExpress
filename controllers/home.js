@@ -42,6 +42,18 @@ exports.search = function(req,res){
     });
 };
 
+exports.page = function(req,res){
+    var category = req.params.category === 'all'?'':req.params.category;
+    var index = req.params.index;
+    Article.fetchsByCategory(category,index,function(result){
+       if(result.length > 0){
+           res.json(result)
+       } else{
+           res.json([]);
+       }
+    });
+}
+
 var getBordByDays = exports.getBordByDays = function(days,callback){
     var _days = moment().subtract(days, 'days').format();
     Article.getHitList(_days,function(hits){
