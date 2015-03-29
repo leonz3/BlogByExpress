@@ -9,7 +9,8 @@ exports.index = function (req, res,next) {
     } else {
         console.log(req.session.self)
         Article.fetchsByCategory(_cid, 1, function (result1) {
-            getBordByDays(7, function (result2,result3) {
+            getBordByDays(30, function (result2,result3) {
+                console.log(result2,result3)
                 res.render('home/index', {
                     self: req.session.self,
                     articles: result1,

@@ -20,10 +20,9 @@ define(function (require, exports, module) {
             window.location.href = '/search/' + _key;
         });
 
-        loader.run('rolloader', function (index,isEnd) {
-            console.log(index);
+        loader.run('rolloader', function (loader) {
             $.ajax({
-                url: '/page/all/' + index,
+                url: '/page/all/' + (++loader.index),
                 dataType: 'json',
                 success: function (data) {
                     if (data.length > 0) {
@@ -39,6 +38,7 @@ define(function (require, exports, module) {
                         $('.list-articles').append($(html));
                     }else{
                         console.log('there is no articles more');
+                        loader.isEnd = true;
                     }
                 }
             });

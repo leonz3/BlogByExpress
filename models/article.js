@@ -39,7 +39,7 @@ Article.fetchsByUser = function (uid, index, callback) {
 
 //分类分页获取所有用户文章
 Article.fetchsByCategory = function (cid, index, callback) {
-    var _sql = 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId = u.UserId'
+    var _sql = 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId = u.UserId order by a.PublishTime desc'
     var start = ~~index === 1 ? 0 : 20 + (index - 2) * 10;
     var end = ~~index === 1 ? start + 20 : start + 10;
     if (cid) {

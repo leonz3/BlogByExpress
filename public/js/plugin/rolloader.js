@@ -11,15 +11,25 @@ define(function (require, exports, module) {
                 document.body.scrollTop;
     }
 
-    exports.run = function(id, callback){
+    var Rolloader = function(id,callback){
         var elem = document.getElementById(id);
         var windowHeight = getWindowHeight();
-        var index = 1;
-        var isEnd = false;
-        window.onscroll = function(){
-            if((getScrollTop() + windowHeight) >= elem.offsetTop && !isEnd){
-                callback(++index,isEnd);
+
+        this.index = 1;
+        this.isEnd = false;
+
+        this.run = function(){
+            var _this = this;
+            window.onscroll = function(){
+                if(((getScrollTop() + windowHeight) >= elem.offsetTop) && !_this.isEnd){
+                    callback.call(Rolloader,_this);
+                }
             }
         }
+
+    }
+
+    exports.run = function(id, callback){
+        new Rolloader(id,callback).run();
     };
 });
