@@ -60,7 +60,7 @@ define(function(require,exports,module){
                 }(),
                 save: function () {
                     if (_this.type) {
-                        return $('input[type="checkbox"]').val();
+                        return $('input[type="checkbox"]:checked').val() || 'unsave';
                     }
                 }()
             }
@@ -79,14 +79,13 @@ define(function(require,exports,module){
                 type:'post',
                 data:_this.data,
                 success:function(data){
-                    console.log(data)
                     if(data.status === 'success'){
                         window.location.reload();
                     }else{
                         $('.text-danger').html(data.message).removeClass('hide');
                     }
                 }
-            })
+            });
         }
     }
 

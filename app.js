@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var exphbs = require('express-handlebars');
 var viewHelper = require('./utils/htmlHelper');
 var upload = require('./controllers/upload');
@@ -26,9 +27,14 @@ app.use(express.static(path.join(__dirname, 'public/libs')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(session({
+    secret:'leon',
+    resave:false,
+    saveUninitialized:false
+}));
 app.use(upload.imgUpload());
 
-app.use(require('./config/session'))
+//app.use(require('./config/session'))
 require('./config/router')(app);
 
 app.listen(app.get('port'));

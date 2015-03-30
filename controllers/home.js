@@ -7,10 +7,8 @@ exports.index = function (req, res,next) {
     if (_cid && isNaN(parseInt(_cid))) {
         next();
     } else {
-        console.log(req.session.self)
         Article.fetchsByCategory(_cid, 1, function (result1) {
             getBordByDays(30, function (result2,result3) {
-                console.log(result2,result3)
                 res.render('home/index', {
                     self: req.session.self,
                     articles: result1,
@@ -19,6 +17,7 @@ exports.index = function (req, res,next) {
                 });
             });
         });
+
     }
 };
 

@@ -6,7 +6,7 @@ var utils = require('../utils/utils');
 
 
 exports.center = function(req,res){
-    var target = req.session.target;
+    var target = req.target;
     Article.fetchsByUser(target.UserId,1,function(article){
         Mood.fetchsByUser(target.UserId,1,function(mood){
             res.render('user/center',{
@@ -20,7 +20,7 @@ exports.center = function(req,res){
 }
 
 exports.article = function(req,res){
-    var target = req.session.target;
+    var target = req.target;
     Article.fetchsByUser(target.UserId,1,function(result){
         res.render('user/article',{
             self:req.session.self,
@@ -31,7 +31,7 @@ exports.article = function(req,res){
 }
 
 exports.mood = function(req,res){
-    var target = req.session.target;
+    var target = req.target;
     Mood.fetchsByUser(target.UserId,1,function(result){
         res.render('user/mood',{
             self:req.session.self,
@@ -42,27 +42,31 @@ exports.mood = function(req,res){
 }
 
 exports.info = function(req,res){
-    var target = req.session.target;
-    User.getInfo(target.UserId,function(result){
-        res.render('user/info',{
-            self:req.session.self,
-            target:result[0]
-        });
-    });
+    //var target = req.target;
+    res.render('user/info',{
+        self:req.session.self,
+        target:req.target
+    })
+    //User.getInfo(target.UserId,function(result){
+    //    res.render('user/info',{
+    //        self:req.self,
+    //        target:result[0]
+    //    });
+    //});
 };
 
 exports.config = function(req,res,next){
-    if(!req.session.isSelf){
+    if(!req.isSelf){
         next();
     }
     res.render('user/config',{
         self:req.session.self,
-        target:req.session.target
+        target:req.target
     });
 };
 
 exports.collection = function(req,res){
-    var target = req.session.target;
+    var target = req.target;
     User.getCollection(target.UserId,function(result){
         if(result.length>0){
             res.render('user/collection',{
@@ -96,9 +100,9 @@ var loginHandler = function(result,req,res,value,key){
         return res.send({status:'error',message:'账号密码不正确'});
     }
     if(req.body.save === 'save'){
-        res.cookie('self',value,{});
+        res.cookie('self',value,{maxAge:604800000});
     }
-    req.session.self = new User(result[0]);
+    req.session.self = result[0];
     res.send({status:'success'});
 };
 

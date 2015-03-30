@@ -30,6 +30,7 @@ body{padding-top:50px;}
 
 /* Article detail*/
 .article-title .help-block{font-size:13px;margin-top:8px;}
+.article-btns{margin-top: 18px;}
 .article-btns>div{margin-right:12px;display: inline-block;border:1px solid #ddd;}
 .article-btns>div a{top:2px;font-size: 20px}
 .article-btns>div a:hover,.article-btns div a:active,.article-btns div a:focus{color:#999;}
