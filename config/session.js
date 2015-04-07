@@ -1,7 +1,7 @@
 
 var session = require('express-session');
 var sessionStore = require('express-mysql-session');
-var config = require('./mysql_config.json');
+var config = require('./config.json');
 
 module.exports = session({
     secret:'leon',

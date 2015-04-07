@@ -3,7 +3,7 @@ var User = require('../models/user');
 var Mood = require('../models/mood');
 var Article = require('../models/article');
 var utils = require('../utils/utils');
-
+var mailer = require('../utils/mailer');
 
 exports.center = function(req,res){
     var target = req.target;
@@ -80,7 +80,7 @@ exports.collection = function(req,res){
 
 //用户登录
 exports.login = function(req,res){
-    var password = utils.getMd5(req.body.password);
+    var password = utils.generateMd5(req.body.password);
     var name = req.body.name;
     User.fetchByName(name,function(result){
         if(result.length <= 0){
@@ -118,7 +118,7 @@ exports.regist = function(req,res){
     var user = new User({
         NickName:req.body.name,
         Email:req.body.email,
-        Password:utils.getMd5(req.body.password)
+        Password:utils.generateMd5(req.body.password)
     });
     User.fetchByName(user.NickName,function(result){
         if(result.length > 0){
@@ -132,6 +132,13 @@ exports.regist = function(req,res){
                         if(result.affectedRows>0){
                             user.UserId = result.insertId;
                             req.session.self = user;
+                            mailer.send(user,function(err,info){
+                                if(err){
+
+                                }else{
+
+                                }
+                            });
                             res.send({status:'success'});
                         }else{
                             res.send({status:'error',message:'网络错误，注册失败'});
@@ -142,5 +149,3 @@ exports.regist = function(req,res){
         }
     });
 }
-
-

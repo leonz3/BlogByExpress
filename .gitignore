@@ -7,8 +7,9 @@ node_modules
 # bower dependency direcotry
 public/libs
 
-# mysql connect params file
-config/mysql_config.json
+# config info
+config.json
+config/*.json
 
 #Hbuilder files
 .project

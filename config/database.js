@@ -1,6 +1,6 @@
 
 var mysql = require('mysql');
-var config = require('./mysql_config.json');
+var config = require('./config.json');
 
 var pool = mysql.createPool(config.Aliyun);
 
