@@ -1,23 +1,22 @@
 
 var Article = require('../models/article');
-var moment = require('moment');
+var Service = require('../services/service');
 
 exports.index = function (req, res,next) {
     var _cid = req.params.CategoryId || '';
     if (_cid && isNaN(parseInt(_cid))) {
         next();
     } else {
-        Article.fetchsByCategory(_cid, 1, function (result1) {
-            getBordByDays(30, function (result2,result3) {
+        Article.fetchsByCategory(_cid, 1, function (articles) {
+            Service.getBordByDays(30, function (hitList,commentList) {
                 res.render('home/index', {
                     self: req.session.self,
-                    articles: result1,
-                    hitList:result2,
-                    commentList:result3
+                    articles: articles,
+                    hitList:hitList,
+                    commentList:commentList
                 });
             });
         });
-
     }
 };
 
@@ -30,7 +29,7 @@ exports.about = function (req, res) {
 exports.search = function(req,res){
     var _key = req.params.key;
     Article.fetchsByKey(_key,function(result1){
-        getBordByDays(7,function(result2,result3){
+        Service.getBordByDays(7,function(result2,result3){
             res.render('home/index',{
                 self:req.session.self,
                 articles:result1,
@@ -54,11 +53,3 @@ exports.page = function(req,res){
     });
 }
 
-var getBordByDays = exports.getBordByDays = function(days,callback){
-    var _days = moment().subtract(days, 'days').format();
-    Article.getHitList(_days,function(hits){
-       Article.getCommentList(_days,function(comments){
-            callback(hits,comments);
-       });
-    });
-};

@@ -26,10 +26,21 @@ User.prototype.save = function(callback){
     });
 };
 
+//通过ID查找用户
+User.fetchById = function(id,callback){
+    db.execute({
+        sql:'select UserId,NickName,Password,Email,Portrait,Status from users where UserId=?',
+        values:[id],
+        handler:function(result){
+            callback(result);
+        }
+    });
+};
+
 //通过昵称查找用户
 User.fetchByName = function(nickname,callback){
     db.execute({
-        sql:'select UserId,NickName,Password,Email,Portrait from users where nickname=?',
+        sql:'select UserId,NickName,Password,Email,Portrait,Status from users where nickname=?',
         values:[nickname],
         handler:function(result){
             callback(result);
@@ -40,7 +51,7 @@ User.fetchByName = function(nickname,callback){
 //通过邮箱查找用户
 User.fetchByMail = function(mail,callback){
     db.execute({
-        sql:'select UserId,NickName,Password,Email,Portrait from users where Email=?',
+        sql:'select UserId,NickName,Password,Email,Portrait,Status from users where Email=?',
         values:[mail],
         handler:function(result){
             callback(result);
@@ -69,6 +80,5 @@ User.getCollection = function(id,callback){
         }
     });
 }
-
 
 module.exports = User;

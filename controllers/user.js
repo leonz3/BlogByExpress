@@ -149,3 +149,15 @@ exports.regist = function(req,res){
         }
     });
 }
+
+exports.verify = function(req,res){
+    var uid = req.query.uid;
+    var lock = req.query.key;
+    User.fetchById(uid,function(result){
+        var user = new User(result[0]);
+        var key = utils.generateMd5(user.NickName + user.Password);
+        if(lock === key){
+
+        }
+    });
+};

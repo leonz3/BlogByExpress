@@ -57,7 +57,7 @@ define(function(require,exports,moudle){
                 data:_this.store,
                 success:function(data){
                     if(data.status  === 'success'){
-                        window.location.href = '/article/' + data.insertId;
+                        window.location.href = '/a' + data.insertId;
                     }
                 }
             })

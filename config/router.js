@@ -28,11 +28,11 @@ module.exports = function (app) {
     app.get('/u:id/collection', checker.checkTarget,checker.isSelf,user.collection);
 
     //aritcle
+    app.get('/a:id', article.detail);
+    app.get('/a:id/edit', article.edit);
     app.get('/article/edit', article.edit);
-    app.get('/article/:id', article.detail);
-    app.get('/article/edit/:id', article.edit);
     app.post('/article/save', article.save);
-    app.delete('/article/:id',article.delete);
+    app.delete('/a:id',article.delete);
     app.post('/article/collect',article.upCollection);
     app.delete('/aricle/collect',article.downCollection);
     app.post('/article/praise',article.upPraise);

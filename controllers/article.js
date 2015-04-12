@@ -1,26 +1,30 @@
 
 var Article = require('../models/article');
 var Comment = require('../models/comment');
-var homeController = require('./home');
+var Service = require('../services/service');
 
 //详细页视图
 exports.detail = function (req, res) {
     var _id = req.params.id;
+    var user = req.session.self;
     Article.fetch(_id, function (result1) {
         if (result1.length > 0) {
             var article = new Article(result1[0]);
+            console.log(article.isCollectedByUser(user.UserId));
             article.getPraiseNums(function(pnums){
                 article.getCollectNums(function(cnums){
-                    Comment.fetchsByRootId(_id,function(result2){
-                        homeController.getBordByDays(7,function(result3,result4){
+                    Comment.fetchsByRootId(_id,function(comments){
+                        Service.getBordByDays(7,function(hitList,commentList){
                             res.render('article/detail',{
                                 self:req.session.self,
                                 article:result1[0],
-                                comments:result2,
-                                hitList:result3,
-                                commentList:result4,
+                                comments:comments,
+                                hitList:hitList,
+                                commentList:commentList,
                                 PraiseNums:pnums[0],
-                                CollectNums:cnums[0]
+                                CollectNums:cnums[0],
+                                //isCollected:article.isCollectedByUser(uid),
+                                //isPraised:article.isPraisedByUser(uid)
                             });
                         });
                     });

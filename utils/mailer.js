@@ -12,7 +12,7 @@ var transporter = nodemailer.createTransport({
 });
 
 exports.send = function(target,callback){
-    var link = utils.generateValidatedLink(target);
+    var link = utils.generateVerofiableLink(target);
     var options = {
         from: config.source,
         to: target.Email,
@@ -35,5 +35,5 @@ exports.send = function(target,callback){
 
     transporter.sendMail(options,function(err,info){
         callback(err,info);
-    })
+    });
 }
