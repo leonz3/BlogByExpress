@@ -1,55 +1,53 @@
-
 var Article = require('../models/article');
-var Service = require('../services/service');
+var moment = require('moment');
+var co = require('co');
 
-exports.index = function (req, res,next) {
-    var _cid = req.params.CategoryId || '';
-    if (_cid && isNaN(parseInt(_cid))) {
+exports.index = function (req, res, next) {
+    var cid = req.params.CategoryId || '';
+    if (cid && isNaN(cid)) {
         next();
     } else {
-        Article.fetchsByCategory(_cid, 1, function (articles) {
-            Service.getBordByDays(30, function (hitList,commentList) {
-                res.render('home/index', {
-                    self: req.session.self,
-                    articles: articles,
-                    hitList:hitList,
-                    commentList:commentList
-                });
+        var days = moment().subtract(100, 'days').format();
+        co(function* () {
+            var articles = yield Article.fetchsByCategory(cid, 1);
+            var topList = yield Article.getTopList(days);
+            res.render('home/index', {
+                self: req.session.self,
+                articles: articles,
+                topList: topList
             });
         });
     }
 };
 
 exports.about = function (req, res) {
-    res.render('home/index',{
-        self:req.session.self
+    res.render('home/index', {
+        self: req.session.self
     });
 };
 
-exports.search = function(req,res){
-    var _key = req.params.key;
-    Article.fetchsByKey(_key,function(result1){
-        Service.getBordByDays(7,function(result2,result3){
-            res.render('home/index',{
-                self:req.session.self,
-                articles:result1,
-                hitList:result2,
-                commentList:result3
-            });
-
+exports.search = function (req, res) {
+    var key = req.params.key;
+    var days = moment().subtract(100, 'days').format();
+    co(function*() {
+        var articles = yield Article.fetchsByKey(key);
+        var topList = yield Article.getTopList(days);
+        res.render('home/index', {
+            self: req.session.self,
+            articles: articles,
+            topList: topList
         });
     });
 };
 
-exports.page = function(req,res){
-    var category = req.params.category === 'all'?'':req.params.category;
+exports.page = function (req, res) {
+    var category = req.params.category === 'all' ? '' : req.params.category;
     var index = req.params.index;
-    Article.fetchsByCategory(category,index,function(result){
-       if(result.length > 0){
-           res.json(result)
-       } else{
-           res.json([]);
-       }
+    co(function*() {
+        var articles = yield Article.fetchsByCategory(category, index);
+        articles.length > 0
+            ? res.json(articles)
+            : res.json([]);
     });
-}
+};
 

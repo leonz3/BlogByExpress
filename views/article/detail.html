@@ -11,11 +11,11 @@
             <div class="text-center article-btns">
                 <div>
                     <a href="javascript:void(0)" class="btn btn-collect glyphicon glyphicon-star" data-toggle="tooltip" data-placement="left" title="收藏"></a>
-                    <p class="collection-nums">{{setDefault CollectNums.nums 0}}</p>
+                    <p class="collection-nums" data-test="{{userHandler.isCollected}}">{{setDefault statist.praises 0}}</p>
                 </div>
                 <div>
                     <a href="javascript:void(0)" class="btn btn-praise glyphicon glyphicon-heart" data-toggle="tooltip" data-placement="right" title="点赞"></a>
-                    <p class="praise-nums">{{setDefault PraiseNums.nums 0}}</p>
+                    <p class="praise-nums" data-test="{{userHandler.isPraised}}">{{setDefault statist.collections 0}}</p>
                 </div>
             </div>
             <div >

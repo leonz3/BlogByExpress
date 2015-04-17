@@ -5,7 +5,7 @@ body{padding-top:50px;}
 .navbar-right>li>a{padding:15px 10px;}
 .navbar-right>li>.glyphicon{font-size:20px;}
 .navbar-right .dropdown-menu{padding:0;}
-.navbar-right .dropdown-menu>li:first-child{border-bottom: 1px solid #dde;}
+.navbar-right .dropdown-menu>li:not(:last-child){border-bottom: 1px solid #dde;}
 .navbar-right .dropdown-menu>li>a{line-height: 27px;}
 
 /* index */

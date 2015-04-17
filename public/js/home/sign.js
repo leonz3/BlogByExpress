@@ -11,7 +11,7 @@ define(function(require,exports,module){
             $('.modal-title').html((_type?'欢迎登录':'欢迎注册'));
             $('.btn-redraw').html((_type?'我要注册':'我要登录'));
             $('.btn-submit').html((_type?'登录':'注册并登录'));
-            this.link = (_type? '/login' : '/regist');
+            this.link = (_type? '/login' : '/register');
             if(_type === 1){
                 $('.input-group.flag').removeClass('flag').addClass('hide');
                 $('.checkbox').removeClass('hide');

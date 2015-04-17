@@ -14,10 +14,10 @@ module.exports = function (app) {
     app.get('/search/:key',home.search);
     app.get('/page/:category/:index',home.page);
 
-    //log & regist
+    //sign
     app.get('/logout', user.logout);
     app.post('/login', user.login);
-    app.post('/regist', user.regist);
+    app.post('/register', user.register);
 
     //user
     app.get('/u:id', checker.checkTarget, user.center);

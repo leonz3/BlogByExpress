@@ -11,5 +11,10 @@ public/libs
 config.json
 config/*.json
 
-#Hbuilder files
-.project
+# visual studio files
+obj
+*.suo
+*.njsproj
+*.dat
+*.dat.temp
+
