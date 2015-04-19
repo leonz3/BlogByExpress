@@ -11,7 +11,6 @@ exports.imgUpload = function () {
             return Date.now();
         },
         onFileUploadComplete: function (file, req, res) {
-            console.log('http://' + req.headers.host + '/upload/' + file.name);
             res.send({error: 0, url: 'http://' + req.headers.host + '/upload/' + file.name});
         }
     });

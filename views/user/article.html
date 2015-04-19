@@ -1,14 +1,16 @@
 {{> cover}}
-<div class="container">
+<div class="container margin-top-60">
     <div class="row col-md-11 list-articles">
+        <a class="btn btn-success" href="/article/edit">我要发表</a>
         {{#articles}}
         <div class="media">
             <div class="media-body">
                 <a class="media-heading" href="/a{{ArticleId}}">{{Title}}</a>
+                <a href="javascript:void(0);" class="btn-delete-article small hidden text-muted" data-id="{{ArticleId}}">删除</a>
                 <p>{{Intro}}</p>
             </div>
+            <hr/>
         </div>
-        <hr/>
         {{/articles}}
     </div>
 </div>

@@ -22,7 +22,7 @@ Article.fetchById = function (id) {
 
 //通过用户ID分页获取用户下无分类文章
 Article.fetchsByUser = function (uid, index) {
-    var sql = 'select a.ArticleId,a.Title,a.PublishTime,a.Intro,u.UserId from articles a left join users u on a.userId=u.UserId where u.userid=? limit ?,?';
+    var sql = 'select a.ArticleId,a.Title,a.PublishTime,a.Intro,u.UserId from articles a left join users u on a.userId=u.UserId where u.userid=? order by a.PublishTime desc limit ?,?';
     var start = (~~index - 1) * 10;
     return db.execute({
         sql: sql,
@@ -106,16 +106,10 @@ Article.upPraise = function (uid, aid) {
 //获取排行榜
 Article.getTopList = function (period) {
     return db.execute({
-        sql: 'select ArticleId,Title from articles where PublishTime>? order by Scantimes desc limit 0,10',
+        sql: 'call getTopList(?)',
         values: [period],
-        handler: function (hitList, resovle, reject) {
-            db.execute({
-                sql: 'select a.ArticleId,a.Title from articles a left join (select RootId as ArticleId,Count(CommentId) as Comments from comments group by RootId) c on a.ArticleId=c.ArticleId where a.PublishTime>? order by c.Comments desc limit 0,10',
-                values: [period],
-                handler: function (commentList) {
-                    resovle({byHit: hitList, byComment: commentList});
-                }
-            });
+        handler: function (result, resovle, reject) {
+            resovle({byHit:result[0],byComment:result[1]});
         }
     });
 };
@@ -139,7 +133,6 @@ Article.prototype.isOperateByUser = function (uid) {
         sql: 'call isOperatedByUser(?,?)',
         values: [uid, this.ArticleId],
         handler: function (result, resolve, reject) {
-            console.log(result)
             var isPraised = result[0].length > 0 ? true : false;
             var isCollected = result[1].length > 0 ? true : false;
             resolve({isPraised: isPraised, isCollected: isCollected});

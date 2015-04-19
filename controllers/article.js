@@ -31,13 +31,12 @@ exports.edit = function (req, res) {
     var id = req.params.id || '';
     var article = null;
     if (/^\d+$/g.test(id)) {
-        co(function*() {
-            var article = yield Article.fetchById(id);
-            if (article.length > 0) {
-                res.render('article/edit', {
-                    self: req.session.self,
-                    article: article[0]
-                });
+        Article.fetchById(id).then(function(result){
+            if(result.length > 0){
+                res.render('article/edit',{
+                    self:req.session.self,
+                    article:result[0]
+                })
             }
         });
     } else {
@@ -59,11 +58,10 @@ exports.save = function (req, res) {
         Source: req.body.source,
         PublishTime: new Date()
     });
-    co(function*() {
-        var saveResult = yield article.save();
-        if (saveResult.affectedRows > 0) {
-            res.json({status: 'success', id: (article.ArticleId ? article.ArticleId : saveResult.insertId)});
-        } else {
+    article.save().then(function(result){
+        if(result.affectedRows > 0){
+            res.json({status: 'success', id: (article.ArticleId ? article.ArticleId : result.insertId)});
+        }else{
             res.json({status: 'error'});
         }
     });
@@ -71,9 +69,8 @@ exports.save = function (req, res) {
 
 //文章删除
 exports.delete = function (req, res) {
-    co(function*() {
-        var rmResult = yield Article.delete(req.body.aid, req.body.uid);
-        if (rmResult.affectedRows > 0) {
+    Article.delete(req.params.id, req.body.uid).then(function(result){
+        if(result.affectedRows > 0){
             res.send('success');
         }
     });
@@ -81,9 +78,8 @@ exports.delete = function (req, res) {
 
 //文章收藏
 exports.upCollection = function (req, res) {
-    co(function*() {
-        var result = yield Article.upCollection(req.body.desc, req.body.uid, req.body.aid);
-        if (result.affectedRows > 0) {
+    Article.upCollection(req.body.uid, req.body.aid).then(function(result){
+        if(result.affectedRows > 0){
             res.send('success');
         }
     });
@@ -91,19 +87,17 @@ exports.upCollection = function (req, res) {
 
 //删除收藏
 exports.downCollection = function (req, res) {
-    co(function*() {
-        var result = yield Article.downCollection(req.body.uid, req.body.aid);
-        if (result.affectedRows > 0) {
-            res.send('success');
-        }
-    });
+    Article.downCollection(req.body.uid, req.body.aid).then(function(result){
+            if(result.affectedRows > 0){
+                res.send('success');
+            }
+        });
 };
 
 //文章点赞
 exports.upPraise = function (req, res) {
-    co(function*() {
-        var result = yield Article.upPraise(req.body.uid, req.body.aid);
-        if (result.affectedRows > 0) {
+    Article.upPraise(req.body.uid,req.body.aid).then(function(result){
+        if(result.affectedRows > 0){
             res.send('success');
         }
     });
@@ -116,9 +110,8 @@ exports.upComment = function (req, res) {
         UserId: req.body.uid,
         RootId: req.body.aid
     });
-    co(function*() {
-        var result = yield comment.save();
-        if (result.affectedRows > 0) {
+    comment.save().then(function(result){
+        if(result.affectedRows > 0){
             res.send('success');
         }
     });
@@ -126,9 +119,8 @@ exports.upComment = function (req, res) {
 
 //删除评论
 exports.downComment = function (req, res) {
-    co(function*() {
-        var result = Comment.delete(req.body.aid, req.body.uid);
-        if (result.affectedRows > 0) {
+    Comment.delete(req.body.id, req.body.uid).then(function(result){
+        if(result.affectedRows > 0){
             res.send('success');
         }
     });

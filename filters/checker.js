@@ -1,13 +1,11 @@
 var User = require('../models/user');
-var co = require('co');
 
 //自动登录
 exports.autoLogin = function (req, res, next) {
     var username = req.cookies.self || '';
     if (username && !req.session.self) {
-        co(function*() {
-            var result = yield User.fetchByName(username);
-            if (result.length > 0) {
+        User.fetchByName(username).then(function(result){
+            if(result.length > 0){
                 req.session.self = result[0];
             }
             next();
@@ -18,10 +16,9 @@ exports.autoLogin = function (req, res, next) {
 
 //获取访问用户对象
 exports.checkTarget = function (req, res, next) {
-    co(function*() {
-        var targetResult = yield User.getInfo(req.params.id);
-        if (targetResult.length > 0) {
-            req.target = targetResult[0];
+    User.getIntro(req.params.id).then(function(result){
+        if (result.length > 0) {
+            req.target = result[0];
             next();
         } else {
             res.send('不存在用户');

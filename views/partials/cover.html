@@ -8,7 +8,10 @@
             </div>
             <div class="media-body">
                 <h3 class="media-heading">{{target.NickName}}</h3>
-                <p>{{target.Job}}</p>
+                <p>
+                    <input type="text" value="{{target.Mood}}" class="txt-mood"/>
+                    <button class="btn btn-save-mood">发表心情</button>
+                </p>
             </div>
         </div>
         <ul class="nav nav-pills">
@@ -20,3 +23,6 @@
         </ul>
     </div>
 </div>
+<script>
+    seajs.use('/js/user/center');
+</script>

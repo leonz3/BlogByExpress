@@ -20,44 +20,44 @@ exports.center = function (req, res) {
     });
 };
 
+//用户文章视图
 exports.article = function (req, res) {
     var target = req.target;
-    co(function*() {
-        var articles = yield Article.fetchsByUser(target.UserId, 1);
+    Article.fetchsByUser(target.UserId, 1).then(function (result) {
         res.render('user/article', {
             self: req.session.self,
             target: target,
-            articles: articles
+            articles: result
         });
     });
 };
 
+//用户心情视图
 exports.mood = function (req, res) {
     var target = req.target;
-    co(function*() {
-        var moods = yield Mood.fetchsByUser(target.UserId, 1);
+    Mood.fetchsByUser(target.UserId, 1).then(function (result) {
         res.render('user/mood', {
             self: req.session.self,
             target: target,
-            moods: moods
-        })
+            moods: result
+        });
+    });
+
+};
+
+//用户资料页视图
+exports.info = function (req, res) {
+    var target = req.target;
+    User.getDetail(target.UserId).then(function (result) {
+        res.render('user/info', {
+            self: req.session.self,
+            target: req.target,
+            user: result[0]
+        });
     });
 };
 
-exports.info = function (req, res) {
-    //var target = req.target;
-    res.render('user/info', {
-        self: req.session.self,
-        target: req.target
-    })
-    //User.getInfo(target.UserId,function(result){
-    //    res.render('user/info',{
-    //        self:req.self,
-    //        target:result[0]
-    //    });
-    //});
-};
-
+//信息设置页视图
 exports.config = function (req, res, next) {
     if (!req.isSelf) {
         next();
@@ -68,15 +68,15 @@ exports.config = function (req, res, next) {
     });
 };
 
+//用户收藏页视图
 exports.collection = function (req, res) {
     var target = req.target;
-    co(function*() {
-        var articles = yield User.getCollection(target.UserId);
+    User.getCollection(target.UserId).then(function (result) {
         res.render('user/collection', {
             self: req.session.self,
             target: target,
-            articles: articles
-        })
+            articles: result
+        });
     });
 };
 
@@ -113,7 +113,6 @@ var loginHandler = function (result, req, res, value, key) {
 exports.logout = function (req, res) {
     req.session.self = null;
     res.clearCookie('self', {});
-    console.log(req.headers);
     return res.redirect(req.headers.referer);
 };
 
@@ -134,7 +133,6 @@ exports.register = function (req, res) {
                 res.send({status: 'error', message: '邮箱已注册'});
             } else {
                 var saveResult = yield user.save();
-                console.log(saveResult)
                 if (!saveResult) {
                     res.send({status: 'error', message: '网络错误，注册失败'});
                 } else {
@@ -163,6 +161,19 @@ exports.verify = function (req, res) {
         var patt = utils.generateMd5(user.NickName + user.Password);
         if (key === patt) {
 
+        }
+    });
+};
+
+//发表心情
+exports.saveMood = function(req,res){
+    var mood = new Mood({
+        UserId:req.body.uid,
+        Content:req.body.content
+    });
+    mood.save().then(function(result){
+        if(result.length > 0){
+            res.send('success');
         }
     });
 };

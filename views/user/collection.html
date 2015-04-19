@@ -1,11 +1,11 @@
 {{> cover}}
-<div class="container">
-    <div class="col-md-9 center-block">
-        <ul class="list-group">
+<div class="container margin-top-60">
+    <div class="col-md-8 center-block">
+        <ul class="list-collections list-unstyled">
             {{#articles}}
-            <li class="list-group-item">
-                <a class="badge">删除</a>
-                <h5>{{Title}}<small>{{Describe}}</small></h5>
+            <li>
+                <a href="/a{{ArticleId}}">{{Title}}</a>
+                <a href="javascript:void(0);" class="btn-collection-delete hidden small text-muted" data-id="{{ArticleId}}">取消收藏</a>
             </li>
             {{/articles}}
         </ul>

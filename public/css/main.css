@@ -16,7 +16,7 @@ body{padding-top:50px;}
 .list-articles hr{margin:10px;}
 .list-articles .media-left a img{border-radius:5px;}
 .list-articles .media-left a span{display: block;width:60px;text-align:center;font:12px/20px "Microsoft YaHei";}
-.list-articles .media-body a{font:17px/30px "Microsoft YaHei";color:#444}
+.list-articles .media-body .media-heading{font:17px/30px "Microsoft YaHei";color:#444}
 .list-articles .media-body p{color:#666;}
 
 /* billbord */
@@ -27,9 +27,11 @@ body{padding-top:50px;}
 .list-category li a{color:#777}
 .panel .list-group{padding:0;}
 .panel .list-group a{padding:5px 8px;}
+.btn.btn-publish{margin-bottom:10px;}
 
 /* Article detail*/
 .article-title .help-block{font-size:13px;margin-top:8px;}
+.article-content{word-wrap: break-word;word-break: break-all;}
 .article-btns{margin-top: 18px;}
 .article-btns>div{margin-right:12px;display: inline-block;border:1px solid #ddd;}
 .article-btns>div a{top:2px;font-size: 20px}
@@ -41,18 +43,26 @@ body{padding-top:50px;}
 /* cover */
 .jumbotron{position: relative;padding:60px 0 0;}
 .jumbotron .container{margin-bottom: -20px;}
-.jumbotron .media .media-body{padding-left: 10px;vertical-align: bottom;}
+.jumbotron .media .media-body{padding-left: 10px;vertical-align: bottom;width:100%;}
 .jumbotron .media .media-body h3{font-size:30px;color:#777}
 .jumbotron .media .media-body p{font-size:16px;color:#999}
 .jumbotron .nav{margin-top: 15px;}
 .jumbotron .nav li{width:80px}
 .jumbotron .nav li a{line-height: 40px;text-align: center;}
+.jumbotron input {background: transparent;border:none;outline:none;width:80%;}
+.jumbotron button{background: transparent;border:1px solid #ccc;}
+.jumbotron input:active, .jumbotron input:focus{border-bottom:1px solid #aaa;}
+.jumbotron input:active+button, .jumbotron input:focus+button{display:inline !important;visibility: visible !important;}
 
 /* user center */
 .list-moods li{border-bottom:1px solid #ddd;}
 .list-moods p:first-child{margin-top: 10px;}
 .list-moods p:last-child{margin-bottom:5px;color:#999;line-height: 1;font-size:12px;}
-
+.list-articles .media-body:hover .btn-article-delete{display:inline !important;visibility: visible !important;}
+.list-collections>li{border-bottom: 1px solid #ddd;}
+.list-collections>li>a:first-child{font-size:16px;color:#666;line-height: 40px;}
+.list-collections>li:hover>a{display:inline !important;visibility: visible !important;}
+.margin-top-60{margin-top: 60px;}
 
 
 

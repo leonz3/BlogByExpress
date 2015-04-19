@@ -1,4 +1,3 @@
-
 var home = require('../controllers/home');
 var user = require('../controllers/user');
 var article = require('../controllers/article');
@@ -8,11 +7,11 @@ var checker = require('../filters/checker');
 module.exports = function (app) {
 
     //index
-    app.get('/', checker.autoLogin,home.index);
+    app.get('/', checker.autoLogin, home.index);
     app.get('/:CategoryId', home.index);
     app.get('/about', home.about);
-    app.get('/search/:key',home.search);
-    app.get('/page/:category/:index',home.page);
+    app.get('/search/:key', home.search);
+    app.get('/page/:category/:index', home.page);
 
     //sign
     app.get('/logout', user.logout);
@@ -24,20 +23,25 @@ module.exports = function (app) {
     app.get('/u:id/article', checker.checkTarget, user.article);
     app.get('/u:id/mood', checker.checkTarget, user.mood);
     app.get('/u:id/info', checker.checkTarget, user.info);
-    app.get('/u:id/config', checker.checkTarget, user.config);
-    app.get('/u:id/collection', checker.checkTarget,checker.isSelf,user.collection);
+    app.get('/u:id/config', checker.checkTarget, checker.isSelf, user.config);
+    app.get('/u:id/collection', checker.checkTarget, checker.isSelf, user.collection);
 
     //aritcle
     app.get('/a:id', article.detail);
     app.get('/a:id/edit', article.edit);
     app.get('/article/edit', article.edit);
     app.post('/article/save', article.save);
-    app.delete('/a:id',article.delete);
-    app.post('/article/collect',article.upCollection);
-    app.delete('/aricle/collect',article.downCollection);
-    app.post('/article/praise',article.upPraise);
-    app.post('/comment',article.upComment);
-    app.delete('/comment',article.downComment);
+    app.delete('/a:id', article.delete);
+    app.post('/article/collect', article.upCollection);
+    app.delete('/aricle/collect', article.downCollection);
+    app.post('/article/praise', article.upPraise);
+
+    //comment
+    app.post('/comment', article.upComment);
+    app.delete('/comment', article.downComment);
+
+    //mood
+    app.post('/mood',user.saveMood);
 
     //upload
     app.post('/kindUpload', upload.kindUpload);
