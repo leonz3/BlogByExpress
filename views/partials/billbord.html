@@ -12,16 +12,16 @@
 <div class="panel panel-default">
     <div class="panel-heading">本周评论排行榜</div>
     <div class="panel-body list-group">
-        {{#topList.byHit}}
+        {{#topList.byComment}}
         <a class="list-group-item" href="/a{{ArticleId}}">{{Title}}</a>
-        {{/topList.byHit}}
+        {{/topList.byComment}}
     </div>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">本周浏览排行榜</div>
     <div class="panel-body list-group">
-        {{#topList.byComment}}
+        {{#topList.byHit}}
         <a class="list-group-item" href="/a{{ArticleId}}">{{Title}}</a>
-        {{/topList.byComment}}
+        {{/topList.byHit}}
     </div>
 </div>

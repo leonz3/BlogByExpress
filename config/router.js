@@ -1,13 +1,15 @@
 var home = require('../controllers/home');
 var user = require('../controllers/user');
 var article = require('../controllers/article');
-var upload = require('../controllers/upload');
+var upload = require('../utils/upload');
 var checker = require('../filters/checker');
 
 module.exports = function (app) {
 
+    app.get('*',checker.autoLogin)
+
     //index
-    app.get('/', checker.autoLogin, home.index);
+    app.get('/', home.index);
     app.get('/:CategoryId', home.index);
     app.get('/about', home.about);
     app.get('/search/:key', home.search);
@@ -25,6 +27,8 @@ module.exports = function (app) {
     app.get('/u:id/info', checker.checkTarget, user.info);
     app.get('/u:id/config', checker.checkTarget, checker.isSelf, user.config);
     app.get('/u:id/collection', checker.checkTarget, checker.isSelf, user.collection);
+    app.post('/u:id/config', user.saveConfig);
+    app.get('/user/isExists', user.isExistsUser);
 
     //aritcle
     app.get('/a:id', article.detail);
@@ -44,7 +48,7 @@ module.exports = function (app) {
     app.post('/mood',user.saveMood);
 
     //upload
-    app.post('/kindUpload', upload.kindUpload);
+    app.post('/imgUpload', upload.imgUpload);
 
     //catch 404 and forward to handler
     app.use(function (req, res, next) {
@@ -54,12 +58,12 @@ module.exports = function (app) {
     });
     //err handle
     app.use(function (err, req, res) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            //development or production
-            error: app.get('env') === 'development' ? err : {}
-        })
+        //res.status(err.status || 500);
+        //res.render('error', {
+        //    message: err.message,
+        //    //development or production
+        //    error: app.get('env') === 'development' ? err : {}
+        //})
     });
 }
 

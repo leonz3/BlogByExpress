@@ -15,7 +15,7 @@ var Article = function (article) {
 //通过文章ID获取单篇文章
 Article.fetchById = function (id) {
     return db.execute({
-        sql: 'select a.ArticleId,a.Title,a.PublishTime,a.ScanTimes,a.Content,a.Intro,a.Source,a.UserId,a.CategoryId,c.Comments from articles a left join (select RootId As ArticleId,COUNT(RootId) AS Comments from comments group by RootId) c on a.ArticleId=c.ArticleId where a.ArticleId=?',
+        sql: 'select ArticleId,Title,PublishTime,ScanTimes,Content,Intro,Source,UserId,CategoryId from articles where ArticleId=?',
         values: [id]
     });
 };
@@ -82,7 +82,7 @@ Article.delete = function (aid, uid) {
 //收藏文章
 Article.upCollection = function (desc, uid, aid) {
     return db.execute({
-        sql: 'insert into user_article_collections values(?,?,?)',
+        sql: 'insert into user_article_collections values(?,?)',
         values: [desc, uid, aid]
     });
 };
@@ -121,8 +121,9 @@ Article.prototype.getStatistics = function () {
         values: [this.ArticleId],
         handler: function (result, resolve, reject) {
             var praises = result[0].length > 0 ? result[0][0].praises : 0;
-            var collections = result[0].length > 0 ? result[1][0].collections : 0;
-            resolve({praises: praises, collections: collections});
+            var collections = result[1].length > 0 ? result[1][0].collections : 0;
+            var comments = result[2].length > 0 ? result[2][0].comments : 0;
+            resolve({praises: praises, collections: collections, comments: comments});
         }
     })
 };

@@ -62,9 +62,13 @@ exports.config = function (req, res, next) {
     if (!req.isSelf) {
         next();
     }
-    res.render('user/config', {
-        self: req.session.self,
-        target: req.target
+    var target = req.target;
+    User.getDetail(target.UserId).then(function (result) {
+        res.render('user/config', {
+            self: req.session.self,
+            target: req.target,
+            user: result[0]
+        });
     });
 };
 
@@ -166,14 +170,71 @@ exports.verify = function (req, res) {
 };
 
 //发表心情
-exports.saveMood = function(req,res){
+exports.saveMood = function (req, res) {
     var mood = new Mood({
-        UserId:req.body.uid,
-        Content:req.body.content
+        UserId: req.body.uid,
+        Content: req.body.content
     });
-    mood.save().then(function(result){
-        if(result.length > 0){
+    mood.save().then(function (result) {
+        if (result.length > 0) {
             res.send('success');
         }
     });
+};
+
+//保存信息
+exports.saveConfig = function (req, res) {
+    var store = req.body;
+    User.setInfo(store.id, store.name, store.email, store.portrait, store.gender, store.location, store.job).then(function(result){
+        if(result.affectedRows > 0){
+            req.session.self.NickName = store.name;
+            req.session.self.Portrait = store.portrait;
+            res.send('success');
+        }else{
+            res.send('error');
+        }
+    });
+};
+
+//用户名是否可用
+exports.isExistsUser = function (req, res) {
+    var uid = req.query.id || '';
+    var field = req.query.field;
+    var type = req.query.type;     //[name, mail, both];
+    var resultHandler = function (result) {
+        if (uid) {
+            if (uid == result.UserId) {
+                res.send({exists: true, equals: true, field: type});
+            } else {
+                res.send({exists: true, equals: false, field: type});
+            }
+        } else {
+            res.send({exists: true, field: type});
+        }
+    };
+    var isExistsHandler = function (res, uid, field, type) {
+
+        if (['name', 'both'].indexOf(type) !== -1) {
+            User.fetchByName(field).then(function (result) {
+                if (result.length > 0) {
+                    resultHandler(result[0]);
+                } else {
+                    if (type === 'both') {
+                        isExistsHandler(res, uid, field, 'mail');
+                    } else {
+                        res.send({exists: false, field: type});
+                    }
+                }
+            });
+        } else {
+            User.fetchByMail(field).then(function (result) {
+                if (result.length > 0) {
+                    resultHandler(result[0]);
+                } else {
+                    res.send({exists: false, field: type});
+                }
+            });
+        }
+    };
+    isExistsHandler(res, uid, field, type);
 };

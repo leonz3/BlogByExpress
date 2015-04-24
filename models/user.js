@@ -44,10 +44,10 @@ User.fetchByMail = function (mail) {
 };
 
 //通过ID获取用户的简单信息
-User.getIntro = function(id){
+User.getIntro = function (id) {
     return db.execute({
         sql: 'select u.UserId,u.NickName,u.Portrait,m.Content as Mood from users u left join user_moods m on u.UserId=m.UserId where u.UserId=? order by PublishTime desc limit 1',
-        values:[id]
+        values: [id]
     });
 };
 
@@ -65,6 +65,14 @@ User.getCollection = function (id) {
         sql: 'select u.UserId,a.ArticleId,a.Title from users u left join user_article_collections c on u.UserId=c.UserId left join articles a on c.ArticleId=a.ArticleId where u.UserId=?',
         values: [id]
     });
-}
+};
+
+//更新用户信息
+User.setInfo = function (id, name, mail, portrait, gender, location, job) {
+    return db.execute({
+        sql: 'call setUserInfo(?,?,?,?,?,?,?)',
+        values: [id, name, mail, portrait, gender, location, job]
+    });
+};
 
 module.exports = User;

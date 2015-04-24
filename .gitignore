@@ -18,3 +18,6 @@ obj
 *.dat
 *.dat.temp
 
+# upload files
+public/upload
+

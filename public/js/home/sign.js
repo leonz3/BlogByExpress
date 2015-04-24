@@ -1,26 +1,25 @@
-define(function(require,exports,module){
+define(function (require) {
     var $ = require('jquery');
-    //require('validation')($);
 
     var Login = {
-        type:1  //1=login,0=regist
-        ,link:'/login'
-        ,data:{}
-        ,redraw:function(){
+        type: 1  //1=login,0=regist
+        , link: '/login'
+        , data: {}
+        , redraw: function () {
             var _type = this.type;
-            $('.modal-title').html((_type?'欢迎登录':'欢迎注册'));
-            $('.btn-redraw').html((_type?'我要注册':'我要登录'));
-            $('.btn-submit').html((_type?'登录':'注册并登录'));
-            this.link = (_type? '/login' : '/register');
-            if(_type === 1){
+            $('.modal-title').html((_type ? '欢迎登录' : '欢迎注册'));
+            $('.btn-redraw').html((_type ? '我要注册' : '我要登录'));
+            $('.btn-submit').html((_type ? '登录' : '注册并登录'));
+            this.link = (_type ? '/login' : '/register');
+            if (_type === 1) {
                 $('.input-group.flag').removeClass('flag').addClass('hide');
                 $('.checkbox').removeClass('hide');
-            }else{
+            } else {
                 $('.input-group.hide').removeClass('hide').addClass('flag');
                 $('.checkbox').addClass('hide');
             }
         }
-        ,getData:function(){
+        , getData: function () {
             var _this = this;
             this.data = {
                 name: function () {
@@ -35,9 +34,9 @@ define(function(require,exports,module){
                     var _val = $('#txt_mail').val().trim();
                     if (!_this.type) {
                         var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                        if(!_val || !reg.test(_val)){
+                        if (!_val || !reg.test(_val)) {
                             throw new Error('请输入正确邮箱');
-                        }else{
+                        } else {
                             return _val;
                         }
 
@@ -65,37 +64,37 @@ define(function(require,exports,module){
                 }()
             }
         }
-        ,submit:function(){
+        , submit: function () {
             var _this = this;
             $('.text-danger').addClass('hide');
-            try{
+            try {
                 _this.getData();
-            }catch(e){
+            } catch (e) {
                 $('.text-danger').html(e.message).removeClass('hide');
                 return;
             }
             $.ajax({
-                url:_this.link,
-                type:'post',
-                data:_this.data,
-                success:function(data){
-                    if(data.status === 'success'){
+                url: _this.link,
+                type: 'post',
+                data: _this.data,
+                success: function (data) {
+                    if (data.status === 'success') {
                         window.location.reload();
-                    }else{
+                    } else {
                         $('.text-danger').html(data.message).removeClass('hide');
                     }
                 }
             });
         }
-    }
+    };
 
-    exports.run = function() {
-        $('.btn-redraw').on('click',function(){
-            Login.type = Login.type==1?0:1;
+    return function () {
+        $('.btn-redraw').on('click', function () {
+            Login.type = Login.type == 1 ? 0 : 1;
             Login.redraw();
         });
-        $('.btn-submit').on('click',function(){
+        $('.btn-submit').on('click', function () {
             Login.submit();
         })
-    }
+    }();
 });

@@ -1,6 +1,7 @@
-define(function(require,exports,moudle){
+define(function(require){
     var $ = require('jquery');
     var $slc = $('#slc_cid');
+
     var Article = {
         store:{}
         ,getData:function(){
@@ -62,8 +63,9 @@ define(function(require,exports,moudle){
                 }
             })
         }
-    }
-    exports.run = function(){
+    };
+
+    return function(){
         var cid = $slc.attr('data-category');
         $slc.val(cid);
         var source = $('#chk_source').attr('data-source');
@@ -75,6 +77,6 @@ define(function(require,exports,moudle){
         $('#btn_save').on('click',function(){
             Article.submit();
         });
-    }
+    }();
 
 });

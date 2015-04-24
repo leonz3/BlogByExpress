@@ -4,7 +4,7 @@
 var multer = require('multer');
 
 //通过multer上传
-exports.imgUpload = function () {
+exports.upload = function () {
     return multer({
         dest: './public/upload/',
         rename: function (fieldname, filename) {
@@ -14,10 +14,10 @@ exports.imgUpload = function () {
             res.send({error: 0, url: 'http://' + req.headers.host + '/upload/' + file.name});
         }
     });
-}
+};
 
 //通过formidable上传，改用multer
-exports.kindUpload = function (req, res) {
+exports.imgUpload = function (req, res) {
     //var form = new formidable.IncomingForm();
     ////form.keepExtensions = true;
     //form.uploadDir = 'public/upload';
@@ -35,6 +35,6 @@ exports.kindUpload = function (req, res) {
     //        });
     //    }
     //});
-}
+};
 
 

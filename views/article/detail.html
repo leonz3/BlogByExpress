@@ -3,19 +3,19 @@
         <div class="col-md-9">
             <h2 class="page-header article-title" data-id="{{article.ArticleId}}">
                 {{article.Title}}
-                <small class="help-block">发表于<span>{{formatDate article.PublishTime}}</span>, 点击<span>{{article.ScanTimes}}</span>次, 评论<span class="commnet-nums">{{setDefault article.Comments 0}}</span>条</small>
+                <small class="help-block">发表于<span>{{formatDate article.PublishTime}}</span>, 点击<span>{{article.ScanTimes}}</span>次, 评论<span class="commnet-nums">{{statist.comments}}</span>条</small>
             </h2>
             <div class="article-content">
                 {{{article.Content}}}
             </div>
             <div class="text-center article-btns">
-                <div>
-                    <a href="javascript:void(0)" class="btn btn-collect glyphicon glyphicon-star" data-toggle="tooltip" data-placement="left" title="收藏"></a>
-                    <p class="collection-nums" data-test="{{userHandler.isCollected}}">{{setDefault statist.praises 0}}</p>
+                <div data-toggle="tooltip" data-placement="left" title="{{judge userHandler.isCollected '已收藏' '收藏'}}">
+                    <a href="javascript:void(0)" class="btn btn-collect glyphicon glyphicon-star {{judge userHandler.isCollected 'disabled'}}"></a>
+                    <p class="collection-nums">{{statist.collections}}</p>
                 </div>
-                <div>
-                    <a href="javascript:void(0)" class="btn btn-praise glyphicon glyphicon-heart" data-toggle="tooltip" data-placement="right" title="点赞"></a>
-                    <p class="praise-nums" data-test="{{userHandler.isPraised}}">{{setDefault statist.collections 0}}</p>
+                <div data-toggle="tooltip" data-placement="right" title="{{judge userHandler.isPraised '已点赞' '点赞'}}">
+                    <a href="javascript:void(0)" class="btn btn-praise glyphicon glyphicon-heart {{judge userHandler.isPraised 'disabled'}}"></a>
+                    <p class="praise-nums">{{statist.praises}}</p>
                 </div>
             </div>
             <div >
@@ -88,7 +88,5 @@
 </div>
 {{> popup}}
 <script>
-    seajs.use('/js/article/detail',function(result){
-        result.run();
-    });
+    seajs.use('/js/article/detail');
 </script>

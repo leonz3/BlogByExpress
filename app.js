@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var exphbs = require('express-handlebars');
 var viewHelper = require('./utils/htmlHelper');
-var upload = require('./controllers/upload');
+var upload = require('./utils/upload');
 
 var app = express();
 
@@ -32,7 +32,7 @@ app.use(session({
     resave:false,
     saveUninitialized:false
 }));
-app.use(upload.imgUpload());
+app.use(upload.upload());
 
 //app.use(require('./config/session'))
 require('./config/router')(app);

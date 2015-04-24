@@ -3,7 +3,7 @@ define(function(require){
     var options = {
         cssPath: '/kindeditor/themes/default/default.css',
         basePath: '/kindeditor/',
-        uploadJson: "/kindUpload",
+        uploadJson: "/imgUpload",
         filterMode: true,
         items: [
             'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
