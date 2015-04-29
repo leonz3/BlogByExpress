@@ -23,7 +23,6 @@ app.engine('.html', exphbs({
 app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public/libs')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());

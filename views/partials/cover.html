@@ -9,9 +9,9 @@
             </div>
             <div class="media-body">
                 <h3 class="media-heading">{{target.NickName}}</h3>
-                <p>
+                <p class="clearfix">
                     <input type="text" value="{{target.Mood}}" class="txt-mood"/>
-                    <button class="btn btn-save-mood">发表心情</button>
+                    <button class="btn btn-save-mood hide">发表心情</button>
                 </p>
             </div>
         </div>
@@ -24,6 +24,4 @@
         </ul>
     </div>
 </div>
-<script>
-    seajs.use('/js/user/center');
-</script>
+<script src="build/user_center.js"></script>

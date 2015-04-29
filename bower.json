@@ -12,11 +12,8 @@
     "bower_components"
   ],
   "dependencies": {
-    "jquery": "1.11.2",
-    "seajs": "2.3.0",
-    "bootstrap": "3.3.0",
+    "bootstrap": "~3.3.4",
     "kindeditor": "*",
-    "bootstrap3-validation.js": "https://github.com/mrlong/bootstrap3-validation.js.git",
-    "moment": "~2.9.0"
+    "jquery": "1.11.2"
   }
 }

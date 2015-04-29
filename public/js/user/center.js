@@ -1,67 +1,118 @@
-define(function(require) {
-    var $ = require('jquery');
-    require('popup')($);
+var $ = require('jquery');
+require('../plugin/bspopup.js');
 
-    var userId = function(){
-        return $('.user').attr('data-id').trim() || '';
-    }();
+var userId = function () {
+    return $('.user').attr('data-id').trim() || '';
+}();
 
-    var rmArticle = function(aid,uid,$root){
-        $.popup({
-            title: '请确认操作',
-            content: '您确定要删除文章么？',
-            size: 'sm',
-            yep:{
-                txt:'确定',
-                callback:function(){
-                    $.ajax({
-                        url:'/a' + aid,
-                        type: 'delete',
-                        data: {uid: uid},
-                        success:function(data){
-                            if(data === 'success'){
-                                $.popup().hide();
-                                $root.remove();
-                            }
-                        }
-                    });
-                }
+var currMood = function () {
+    return $('.txt-mood').val().trim();
+}();
+
+var delHanlder = function (args) {
+    $.popup({
+        title: '提示',
+        content: args.msg,
+        size: 'sm',
+        yep: {
+            txt: '确定',
+            callback: function () {
+                $.ajax({
+                    url: args.url,
+                    data: args.data,
+                    type: 'delete',
+                    success: function (result) {
+                        args.cb(result);
+                    }
+                });
             }
-        }).show();
-    };
+        }
+    }).show();
+}
 
-    var Mood = {
-        getData:function(){
+var Mood = {
+    getData: function () {
+        try {
             return {
                 uid: userId,
-                content: function(){
-                    return $('.txt-mood').val().trim();
+                content: function () {
+                    var mood = $('.txt-mood').val().trim();
+                    if (mood == currMood) {
+                        throw new Error('repeat');
+                    } else {
+                        return mood;
+                    }
                 }()
             }
-        },
-        submit:function(){
-            var _this = this;
+        } catch (e) {
+            return false;
+        }
+    },
+    submit: function () {
+        var data = this.getData();
+        if (data) {
             $.ajax({
-                url:'/mood',
-                type:'post',
-                data:_this.getData(),
-                success:function(data){
-
+                url: '/mood',
+                type: 'post',
+                data: data,
+                success: function () {
+                    window.location.reload();
                 }
             });
         }
-    };
+    }
+};
 
-    return function(){
-        $('.btn-delete-article').on('click',function(){
-            var aid = $(this).attr('data-id');
-            var uid = $('.user').attr('data-id');
-            rmArticle(aid,uid,$(this).parents('.media'));
-        });
-        $('.btn-save-mood').on('click',function(){
-            console.log(1)
-            Mood.submit();
-        });
-    }();
+var downArticle = function (aid, uid, $root) {
+    delHanlder({
+        msg: '您确定要删除文章么？',
+        url: '/a' + aid,
+        data: {uid: uid},
+        cb: function (result) {
+            if (result === 'success') {
+                $.popup().hide();
+                $root.remove();
+            }
+        }
+    });
+};
 
-});
+var downCollection = function (aid, uid, $root) {
+    delHanlder({
+        msg: '您确定取消收藏文章么？',
+        url: '/aricle/collect',
+        data: {aid: aid, uid: uid},
+        cb: function (result) {
+            if (result === 'success') {
+                $.popup().hide();
+                $root.remove();
+            }
+        }
+    });
+}
+
+module.exports = function () {
+
+    $('.btn-delete-article').on('click', function () {
+        var aid = $(this).attr('data-id');
+        downArticle(aid, userId, $(this).parents('.media'));
+    });
+
+    $('.btn-delete-collect').on('click', function () {
+        var aid = $(this).attr('data-id');
+        downCollection(aid, userId, $(this).parents('li'));
+    });
+
+    $('.btn-save-mood').on('click', function () {
+        Mood.submit();
+    });
+
+    $('.txt-mood').on('click', function (e) {
+        $(this).addClass('actived');
+        e.stopPropagation();
+    });
+
+    $(document).on('click', function () {
+        $('.txt-mood').removeClass('actived');
+    });
+}();

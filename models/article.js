@@ -90,7 +90,7 @@ Article.upCollection = function (desc, uid, aid) {
 //取消收藏文章
 Article.downCollection = function (uid, aid) {
     return db.execute({
-        sql: 'delete user_article_collection where UserId=? and ArticleId=?',
+        sql: 'delete from user_article_collections where UserId=? and ArticleId=?',
         values: [uid, aid]
     })
 };
