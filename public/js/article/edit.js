@@ -1,5 +1,6 @@
-var $ = require('jquery');
-require('../plugin/editor.js');
+
+require('../partial/header.js');
+var simditor = require('../plugin/simditor.js');
 
 var $slc = $('#slc_cid');
 
@@ -33,7 +34,7 @@ var Article = {
                 }
             }(),
             content: function () {
-                var _val = $('#txt_desc').val().trim();
+                var _val = $('#txt_editor').val().trim();
                 if (!_val) {
                     throw new Error('文章内容不能为空');
                 } else {
@@ -41,8 +42,8 @@ var Article = {
                 }
             }(),
             intro: function () {
-                return editor.text().trim().substring(0, 100);
-            }
+                return $('.simditor-body').text().trim().substring(0, 100);
+            }()
         }
     },
     submit: function (callback) {
@@ -52,7 +53,7 @@ var Article = {
         } catch (e) {
             return;
         }
-        console.log(_this.store)
+        console.log(_this.store);
         $.ajax({
             url: '/article/save',
             type: 'post',
@@ -62,11 +63,11 @@ var Article = {
                     window.location.href = '/a' + data.id;
                 }
             }
-        })
+        });
     }
 };
 
-module.exports = function () {
+~function () {
     var cid = $slc.attr('data-category');
     $slc.val(cid);
     var source = $('#chk_source').attr('data-source');
@@ -74,7 +75,7 @@ module.exports = function () {
         if (this.value == source) {
             this.checked = true;
         }
-    })
+    });
     $('#btn_save').on('click', function () {
         Article.submit();
     });

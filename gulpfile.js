@@ -1,40 +1,96 @@
+var fs = require('fs');
+var path = require('path');
+var lodash = require('lodash');
+var webpack = require('webpack');
 var gulp = require('gulp');
-var autoprefixer = require('gulp-autoprefixer');
-var minifycss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
 var rename = require('gulp-rename');
 var nodemon = require('gulp-nodemon');
+var gulpWebpack = require('gulp-webpack');
+var minifycss = require('gulp-minify-css');
+var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
-var webpack = require('gulp-webpack');
-var webpackConfig = require('./config/webpack.config');
+
 
 var reload = browserSync.reload;
 
+var getEntries = function (dir, parentDir) {
+    var result = {};
+    var dirs = fs.readdirSync(dir);
+    var dirLength = dirs.length;
+    if (!dirLength) return;
+    dirs.forEach(function (item) {
+        if (item === 'plugin' || item === 'partial') return;
+        var file = path.resolve(dir, item);
+        var stat = fs.statSync(file);
+        if (stat && stat.isDirectory()) {
+            var res = getEntries(file, item);
+            result = lodash.assign(result, res);
+            if (!--dirLength) return;
+        } else {
+            var fileName = item.replace(/\.\w+$/, '');
+            var key = parentDir ? parentDir + '/' + fileName : fileName;
+            result[key] = file;
+            if (!--dirLength) return;
+        }
+    });
+    return result;
+};
+
+var webpackConfig = {
+    entry: getEntries(path.join(__dirname, 'public/js')),
+    output: {
+        path: path.join(__dirname, 'public/build'),
+        filename: '[name].js'
+    },
+    resolve: {
+        alias: {
+            bootstrap: '../../libs/bootstrap/js'
+        },
+        modulesDirectories: ['public/libs']
+    },
+    module: {
+        loaders: [
+            {test: /\.css$/, loader: 'style-loader!css-loader'},
+            {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
+        ]
+    },
+    plugins: [
+        //new webpack.optimize.CommonsChunkPlugin('common.js'),
+        new webpack.ResolverPlugin(
+            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
+        ),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        })
+    ]
+};
+
 gulp.task('webpack', function () {
-    return gulp.src('public/js/*/[!plugin].js')
-        .pipe(webpack(require('./config/webpack.config')))
+    return gulp.src('public/js/*/*.js')
+        .pipe(gulpWebpack(webpackConfig))
         .pipe(gulp.dest('public/build'));
 });
 
 gulp.task('minjs', function () {
-    return gulp.src('public/js/*/*.js')
-        .pipe(jshint())
+    return gulp.src('public/build/**.js')
         .pipe(uglify())
-        .pipe(rename(function (path) {
-            path.basename += '.min';
-        }))
-        .pipe(gulp.dest('public/dist'));
+        //.pipe(rename(function (path) {
+        //    path.basename += '.min';
+        //}))
+        .pipe(gulp.dest('public/build'));
 });
 
 gulp.task('mincss', function () {
     return gulp.src('public/css/*.css')
         .pipe(autoprefixer())
         .pipe(minifycss())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest('public/dist'));
+        //.pipe(rename({
+        //    suffix: '.min'
+        //}))
+        .pipe(gulp.dest('public/build'));
 });
 
 gulp.task('server', function () {

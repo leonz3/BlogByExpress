@@ -2,7 +2,9 @@ var Article = require('../models/article');
 var moment = require('moment');
 var co = require('co');
 
-//主页视图
+/**
+ * 主页视图
+ */
 exports.index = function (req, res, next) {
     var cid = req.params.CategoryId || '';
     if (cid && isNaN(cid)) {
@@ -21,14 +23,18 @@ exports.index = function (req, res, next) {
     }
 };
 
-//about视图
+/**
+ * about视图
+ */
 exports.about = function (req, res) {
     res.render('home/index', {
         self: req.session.self
     });
 };
 
-//搜索
+/**
+ * 搜索
+ */
 exports.search = function (req, res) {
     var key = req.params.key;
     var days = moment().subtract(100, 'days').format();
@@ -43,7 +49,9 @@ exports.search = function (req, res) {
     });
 };
 
-//分页
+/**
+ * 分页
+ */
 exports.page = function (req, res) {
     var category = req.params.category === 'all' ? '' : req.params.category;
     var index = req.params.index;

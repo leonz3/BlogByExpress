@@ -1,23 +1,10 @@
-var $ = require('jquery');
+
+require('bootstrap/carousel.js');
+require('../partial/header.js');
+
 var loader = require('../plugin/rolloader.js');
 
-(function () {
-    $(document).bind('keyup', function (event) {
-        if (event.keyCode === 13) {
-            if ($('.txt-key:focus').length > 0) {
-                $('.btn-search').trigger('click');
-            }
-            if ($('#login .form-control').filter(':focus').length > 0) {
-                $('.btn-submit').trigger('click');
-            }
-        }
-    });
-    $('.btn-search').bind('click', function () {
-        var _key = $('.txt-key').val().trim();
-        console.log(_key);
-        if (!_key) return;
-        window.location.href = '/search/' + _key;
-    });
+~function () {
 
     loader.run('rolloader', function (loader) {
         $.ajax({
@@ -42,4 +29,12 @@ var loader = require('../plugin/rolloader.js');
             }
         });
     });
-})();
+
+    $('.btn-publish').on('click',function(){
+        if($('.user').length > 0){
+            window.location.href = '/article/edit';
+        }else{
+            $('#sign').modal('show').find('.text-danger').html('请先进行登录！').removeClass('hide');
+        }
+    });
+}();

@@ -7,7 +7,9 @@ var Mood = function (mood) {
     this.PublishTime = mood.PublishTime || new Date();
 };
 
-//通过用户ID分页获取用户心情
+/**
+ * 通过用户ID分页获取用户心情
+ */
 Mood.fetchsByUser = function (uid, index) {
     var sql = 'select m.MoodId,m.Content,m.PublishTime,u.UserId from user_moods m left join users u on m.userId=u.userId where u.userid=? order by PublishTime desc limit ?,?';
     var start = (~~index - 1) * 20;
@@ -17,7 +19,9 @@ Mood.fetchsByUser = function (uid, index) {
     });
 };
 
-//发表心情
+/**
+ * 发表心情
+ */
 Mood.prototype.save = function () {
     return db.execute({
         sql:'insert into user_moods(Content,UserId,PublishTime) values(?,?,?)',

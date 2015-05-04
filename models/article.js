@@ -12,7 +12,9 @@ var Article = function (article) {
     this.Source = article.Source;
 };
 
-//通过文章ID获取单篇文章
+/**
+ * 通过文章ID获取单篇文章
+ */
 Article.fetchById = function (id) {
     return db.execute({
         sql: 'select ArticleId,Title,PublishTime,ScanTimes,Content,Intro,Source,UserId,CategoryId from articles where ArticleId=?',
@@ -20,7 +22,9 @@ Article.fetchById = function (id) {
     });
 };
 
-//通过用户ID分页获取用户下无分类文章
+/**
+ * 通过用户ID分页获取用户下无分类文章
+ */
 Article.fetchsByUser = function (uid, index) {
     var sql = 'select a.ArticleId,a.Title,a.PublishTime,a.Intro,u.UserId from articles a left join users u on a.userId=u.UserId where u.userid=? order by a.PublishTime desc limit ?,?';
     var start = (~~index - 1) * 10;
@@ -31,7 +35,9 @@ Article.fetchsByUser = function (uid, index) {
 
 };
 
-//分类分页获取所有用户文章
+/**
+ * 分类分页获取所有用户文章
+ */
 Article.fetchsByCategory = function (cid, index) {
     var sql = 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId = u.UserId'
     var start = ~~index === 1 ? 0 : 20 + (index - 2) * 10;
@@ -49,14 +55,18 @@ Article.fetchsByCategory = function (cid, index) {
     });
 };
 
-//关键字搜索
+/**
+ * 关键字搜索
+ */
 Article.fetchsByKey = function (key) {
     return db.execute({
         sql: 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId=u.UserId where a.Title like "%' + key + '%" or a.Intro like "%' + key + '%"'
     });
 };
 
-//新增，修改文章
+/**
+ * 新增，修改文章
+ */
 Article.prototype.save = function () {
     if (this.ArticleId) {
         var sql = 'update articles set title=?,content=?,scantimes=?,categoryid=?,intro=?,source=? where articleid=? and userid=?';
@@ -71,7 +81,9 @@ Article.prototype.save = function () {
     });
 };
 
-//删除文章
+/**
+ * 删除文章
+ */
 Article.delete = function (aid, uid) {
     return db.execute({
         sql: 'delete from articles where ArticleId=? And UserId=?',
@@ -79,7 +91,9 @@ Article.delete = function (aid, uid) {
     });
 };
 
-//收藏文章
+/**
+ * 收藏文章
+ */
 Article.upCollection = function (desc, uid, aid) {
     return db.execute({
         sql: 'insert into user_article_collections values(?,?)',
@@ -87,7 +101,9 @@ Article.upCollection = function (desc, uid, aid) {
     });
 };
 
-//取消收藏文章
+/**
+ * 取消收藏文章
+ */
 Article.downCollection = function (uid, aid) {
     return db.execute({
         sql: 'delete from user_article_collections where UserId=? and ArticleId=?',
@@ -95,7 +111,9 @@ Article.downCollection = function (uid, aid) {
     })
 };
 
-//点赞文章
+/**
+ * 点赞文章
+ */
 Article.upPraise = function (uid, aid) {
     return db.execute({
         sql: 'insert into user_article_praise values(?,?)',
@@ -103,7 +121,9 @@ Article.upPraise = function (uid, aid) {
     });
 };
 
-//获取排行榜
+/**
+ * 获取排行榜
+ */
 Article.getTopList = function (period) {
     return db.execute({
         sql: 'call getTopList(?)',
@@ -114,7 +134,9 @@ Article.getTopList = function (period) {
     });
 };
 
-//获取文章的收藏数量和点赞数量
+/**
+ * 获取文章的收藏数量和点赞数量
+ */
 Article.prototype.getStatistics = function () {
     return db.execute({
         sql: 'call getArticleStatistics(?)',
@@ -128,7 +150,9 @@ Article.prototype.getStatistics = function () {
     })
 };
 
-//是否被用户收藏或点赞
+/**
+ * 是否被用户收藏或点赞
+ */
 Article.prototype.isOperateByUser = function (uid) {
     return db.execute({
         sql: 'call isOperatedByUser(?,?)',
@@ -138,6 +162,16 @@ Article.prototype.isOperateByUser = function (uid) {
             var isCollected = result[1].length > 0 ? true : false;
             resolve({isPraised: isPraised, isCollected: isCollected});
         }
+    });
+};
+
+/**
+ * 文章被浏览
+ */
+Article.prototype.scanned = function(){
+    return db.execute({
+        sql: 'update articles set ScanTimes=ScanTimes+1 where ArticleId=?',
+        values: [this.ArticleId]
     });
 };
 

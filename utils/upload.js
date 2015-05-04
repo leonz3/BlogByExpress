@@ -3,7 +3,9 @@
 //var formidable = require('formidable');
 var multer = require('multer');
 
-//通过multer上传
+/**
+ * 通过multer上传
+ */
 exports.upload = function () {
     return multer({
         dest: './public/upload/',
@@ -11,12 +13,21 @@ exports.upload = function () {
             return Date.now();
         },
         onFileUploadComplete: function (file, req, res) {
-            res.send({error: 0, url: 'http://' + req.headers.host + '/upload/' + file.name});
+            /*
+             * simditor
+             */
+            res.send({success: true, file_path: 'http://' + req.headers.host + '/upload/' + file.name});
+            /**
+             * kindeditor
+             */
+            //res.send({error: 0, url: 'http://' + req.headers.host + '/upload/' + file.name});
         }
     });
 };
 
-//通过formidable上传，改用multer
+/**
+ * 通过formidable上传，改用multer
+ */
 exports.imgUpload = function (req, res) {
     //var form = new formidable.IncomingForm();
     ////form.keepExtensions = true;

@@ -14,6 +14,11 @@ exports.autoLogin = function (req, res, next) {
     next();
 };
 
+//是否已登录
+exports.isLogin = function(req, res, next){
+    req.session.self? true: false;
+}
+
 //获取访问用户对象
 exports.checkTarget = function (req, res, next) {
     User.getIntro(req.params.id).then(function(result){

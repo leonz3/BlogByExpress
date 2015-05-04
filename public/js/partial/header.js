@@ -1,4 +1,6 @@
-var $ = require('jquery');
+
+require('bootstrap/modal.js');
+require('bootstrap/dropdown.js');
 
 var Login = {
     type: 1  //1=login,0=regist
@@ -87,12 +89,35 @@ var Login = {
     }
 };
 
-module.exports = function () {
+~function () {
+
+    $(document).bind('keyup', function (event) {
+        if (event.keyCode === 13) {
+            if ($('.txt-key:focus').length > 0) {
+                $('.btn-search').trigger('click');
+            }
+            if ($('#sign .form-control').filter(':focus').length > 0) {
+                $('.btn-submit').trigger('click');
+            }
+        }
+    });
+
+    $('.btn-search').bind('click', function () {
+        var _key = $('.txt-key').val().trim();
+        if (!_key) return;
+        window.location.href = '/search/' + _key;
+    });
+
     $('.btn-redraw').on('click', function () {
         Login.type = Login.type == 1 ? 0 : 1;
         Login.redraw();
     });
+
     $('.btn-submit').on('click', function () {
         Login.submit();
-    })
+    });
+
+    $('#sign').on('hidden.bs.modal',function(){
+        $(this).find('.text-danger').html('').addClass('hide');
+    });
 }();

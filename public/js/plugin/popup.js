@@ -1,4 +1,5 @@
-var $ = require('jquery');
+
+require('bootstrap/modal.js');
 
 var Modal = {
     root: '#popup_modal',
@@ -17,7 +18,7 @@ var defaults = {
     size: 'noraml'      //lg --> large   sm--> small
 };
 
-module.exports = function () {
+~function () {
 
     var $root = $(Modal.root),
         $wrap = $(Modal.wrap),

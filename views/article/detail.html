@@ -33,7 +33,8 @@
                         <div class="media-body">
                             <span class="pull-right">{{formatDate PublishTime}}</span>
                             <h4 class="media-heading">{{NickName}}</h4>
-                            <p>{{Content}}</p>
+                            <a href="javascript:void(0);" class="pull-right hide btn-delete-comment" data-id="{{CommentId}}">删除该评论</a>
+                            <p>{{{Content}}}</p>
                             <!--<div class="media">-->
                                 <!--<div class="media-left">-->
                                     <!--<a href="#">-->
@@ -70,15 +71,9 @@
                     {{/comments}}
                 </ul>
             </div>
-            <hr/>
-            <div class="">
-                <div class="col-sm-1">
-                    <img src="" alt="" width="60" height="60"/>
-                </div>
-                <div class="col-sm-11">
-                    <textarea name="comment" id="txt_comment" class="form-control" rows="5"></textarea>
-                    <button class="btn btn-default pull-right btn-comment">回复</button>
-                </div>
+            <div class="comment-form">
+                <textarea name="comment" id="txt_editor" class="form-control" rows="3"></textarea>
+                <button class="btn btn-default pull-right btn-comment">回复</button>
             </div>
         </div>
         <div class="col-md-3">
@@ -87,4 +82,4 @@
     </div>
 </div>
 {{> popup}}
-<script src="/build/article_detail.js"></script>
+<script src="/build/article/detail.js"></script>

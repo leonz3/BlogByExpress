@@ -3,8 +3,9 @@ var Comment = require('../models/comment');
 var moment = require('moment');
 var co = require('co');
 
-
-//详细页视图
+/**
+ * 详细页视图
+ */
 exports.detail = function (req, res) {
     var id = req.params.id;
     var user = req.session.self;
@@ -15,6 +16,7 @@ exports.detail = function (req, res) {
         var comments = yield Comment.fetchsByRootId(id);
         var userHandler = yield article.isOperateByUser(1);
         var topList = yield Article.getTopList(days);
+        article.scanned();
         res.render('article/detail', {
             self: user,
             article: article,
@@ -26,7 +28,9 @@ exports.detail = function (req, res) {
     });
 };
 
-//发布页视图
+/**
+ * 发布页视图
+ */
 exports.edit = function (req, res) {
     var id = req.params.id || '';
     var article = null;
@@ -46,7 +50,9 @@ exports.edit = function (req, res) {
     }
 };
 
-//文章发布
+/**
+ * 文章发布
+ */
 exports.save = function (req, res) {
     var article = new Article({
         ArticleId: req.body.aid,
@@ -67,7 +73,9 @@ exports.save = function (req, res) {
     });
 };
 
-//文章删除
+/**
+ * 文章删除
+ */
 exports.delete = function (req, res) {
     Article.delete(req.params.id, req.body.uid).then(function(result){
         if(result.affectedRows > 0){
@@ -76,7 +84,9 @@ exports.delete = function (req, res) {
     });
 };
 
-//文章收藏
+/**
+ * 文章收藏
+ */
 exports.upCollection = function (req, res) {
     Article.upCollection(req.body.uid, req.body.aid).then(function(result){
         if(result.affectedRows > 0){
@@ -85,7 +95,9 @@ exports.upCollection = function (req, res) {
     });
 };
 
-//删除收藏
+/**
+ * 删除收藏
+ */
 exports.downCollection = function (req, res) {
     Article.downCollection(req.body.uid, req.body.aid).then(function(result){
             if(result.affectedRows > 0){
@@ -94,7 +106,9 @@ exports.downCollection = function (req, res) {
         });
 };
 
-//文章点赞
+/**
+ * 文章点赞
+ */
 exports.upPraise = function (req, res) {
     Article.upPraise(req.body.uid,req.body.aid).then(function(result){
         if(result.affectedRows > 0){
@@ -103,7 +117,9 @@ exports.upPraise = function (req, res) {
     });
 };
 
-//添加评论
+/**
+ * 添加评论
+ */
 exports.upComment = function (req, res) {
     var comment = new Comment({
         Content: req.body.content,
@@ -117,9 +133,11 @@ exports.upComment = function (req, res) {
     });
 };
 
-//删除评论
+/**
+ * 删除评论
+ */
 exports.downComment = function (req, res) {
-    Comment.delete(req.body.id, req.body.uid).then(function(result){
+    Comment.delete(req.body.cid, req.body.uid).then(function(result){
         if(result.affectedRows > 0){
             res.send('success');
         }

@@ -1,5 +1,10 @@
-var $ = require('jquery');
-require('../plugin/bspopup')($);
+
+require('../partial/header.js');
+require('../plugin/popup.js');
+
+var userHandler = require('../partial/user.js');
+
+userHandler.newMood();
 
 var UserId = $('.user').attr('data-id').trim();
 
@@ -108,8 +113,8 @@ var Upload = function () {
         processData: false,
         contentType: false,
         success: function (result) {
-            if (result.error == 0) {
-                $('.img-portrait').attr('src', result.url);
+            if (result.success === true) {
+                $('.img-portrait').attr('src', result.file_path);
             } else {
                 Popup('上传失败，请刷新后重试！');
             }
@@ -117,7 +122,8 @@ var Upload = function () {
     });
 }
 
-module.exports = function () {
+~function () {
+
     Config.setDefault();
 
     $('.txt-name, .txt-email').on('blur', function () {

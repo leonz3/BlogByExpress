@@ -8,7 +8,9 @@ var User = function (user) {
     this.Portrait = user.Portrait;
 };
 
-//新增用户
+/**
+ * 新增用户
+ */
 User.prototype.save = function () {
     return db.execute({
         sql: 'call createUser(?,?,?)',
@@ -19,7 +21,9 @@ User.prototype.save = function () {
     });
 };
 
-//通过ID查找用户
+/**
+ * 通过ID查找用户
+ */
 User.fetchById = function (id) {
     return db.execute({
         sql: 'select UserId,NickName,Password,Email,Portrait,Status from users where UserId=?',
@@ -27,7 +31,9 @@ User.fetchById = function (id) {
     });
 };
 
-//通过昵称查找用户
+/**
+ * 通过昵称查找用户
+ */
 User.fetchByName = function (nickname) {
     return db.execute({
         sql: 'select UserId,NickName,Password,Email,Portrait,Status from users where nickname=?',
@@ -35,7 +41,9 @@ User.fetchByName = function (nickname) {
     });
 };
 
-//通过邮箱查找用户
+/**
+ * 通过邮箱查找用户
+ */
 User.fetchByMail = function (mail) {
     return db.execute({
         sql: 'select UserId,NickName,Password,Email,Portrait,Status from users where Email=?',
@@ -43,7 +51,9 @@ User.fetchByMail = function (mail) {
     });
 };
 
-//通过ID获取用户的简单信息
+/**
+ * 通过ID获取用户的简单信息
+ */
 User.getIntro = function (id) {
     return db.execute({
         sql: 'select u.UserId,u.NickName,u.Portrait,m.Content as Mood from users u left join user_moods m on u.UserId=m.UserId where u.UserId=? order by PublishTime desc limit 1',
@@ -51,7 +61,9 @@ User.getIntro = function (id) {
     });
 };
 
-//通过ID获取用户的完整信息
+/**
+ * 通过ID获取用户的完整信息
+ */
 User.getDetail = function (id) {
     return db.execute({
         sql: 'select u.UserId,u.NickName,u.Email,u.Portrait,i.Gender,i.RegTime,i.Job,i.Location,m.Moods,c.Comments,a.Articles from users u left join user_info i on u.UserId=i.UserId left join (select UserId,count(ArticleId) as articles from articles group by UserId) a on u.UserId=a.UserId left join (select UserId,count(MoodId) as moods from user_moods group by UserId) m on u.UserId=m.UserId left join (select UserId,count(CommentId) as comments from comments group by UserId) c on u.UserId=c.UserId where u.userId=?',
@@ -59,7 +71,9 @@ User.getDetail = function (id) {
     });
 };
 
-//通过ID获取用户收藏列表
+/**
+ * 通过ID获取用户收藏列表
+ */
 User.getCollection = function (id) {
     return db.execute({
         sql: 'select u.UserId,a.ArticleId,a.Title from users u left join user_article_collections c on u.UserId=c.UserId left join articles a on c.ArticleId=a.ArticleId where u.UserId=?',
@@ -67,7 +81,9 @@ User.getCollection = function (id) {
     });
 };
 
-//更新用户信息
+/**
+ * 更新用户信息
+ */
 User.setInfo = function (id, name, mail, portrait, gender, location, job) {
     return db.execute({
         sql: 'call setUserInfo(?,?,?,?,?,?,?)',

@@ -28,8 +28,6 @@ var Rolloader = function (id, callback) {
 
 };
 
-module.exports  = {
-    run: function (id, callback){
-        new Rolloader(id, callback).run();
-    }
+exports.run = function (id, callback) {
+    new Rolloader(id, callback).run();
 };

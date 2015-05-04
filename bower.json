@@ -12,8 +12,9 @@
     "bower_components"
   ],
   "dependencies": {
+    "jquery": "~2.1.4",
     "bootstrap": "~3.3.4",
-    "kindeditor": "*",
-    "jquery": "1.11.2"
+    "font-awesome": "~4.3.0",
+    "simditor": "~2.1.9"
   }
 }

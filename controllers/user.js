@@ -5,7 +5,9 @@ var utils = require('../utils/utils');
 var mailer = require('../utils/mailer');
 var co = require('co');
 
-//用户中心视图
+/**
+ * 用户中心视图
+ */
 exports.center = function (req, res) {
     var target = req.target;
     co(function*() {
@@ -20,7 +22,9 @@ exports.center = function (req, res) {
     });
 };
 
-//用户文章视图
+/**
+ * 用户文章视图
+ */
 exports.article = function (req, res) {
     var target = req.target;
     Article.fetchsByUser(target.UserId, 1).then(function (result) {
@@ -32,7 +36,9 @@ exports.article = function (req, res) {
     });
 };
 
-//用户心情视图
+/**
+ * 用户心情视图
+ */
 exports.mood = function (req, res) {
     var target = req.target;
     Mood.fetchsByUser(target.UserId, 1).then(function (result) {
@@ -45,7 +51,9 @@ exports.mood = function (req, res) {
 
 };
 
-//用户资料页视图
+/**
+ * 用户资料页视图
+ */
 exports.info = function (req, res) {
     var target = req.target;
     User.getDetail(target.UserId).then(function (result) {
@@ -57,7 +65,9 @@ exports.info = function (req, res) {
     });
 };
 
-//信息设置页视图
+/**
+ * 信息设置页视图
+ */
 exports.config = function (req, res, next) {
     if (!req.isSelf) {
         next();
@@ -72,7 +82,9 @@ exports.config = function (req, res, next) {
     });
 };
 
-//用户收藏页视图
+/**
+ * 用户收藏页视图
+ */
 exports.collection = function (req, res) {
     var target = req.target;
     User.getCollection(target.UserId).then(function (result) {
@@ -84,10 +96,22 @@ exports.collection = function (req, res) {
     });
 };
 
-//用户登录
+/**
+ * 用户登录
+ */
 exports.login = function (req, res) {
     var password = utils.generateMd5(req.body.password);
     var name = req.body.name;
+    var loginHandler = function (result, req, res, value, key) {
+        if (key !== result[0].Password) {
+            return res.send({status: 'error', message: '密码不正确'});
+        }
+        if (req.body.save === 'save') {
+            res.cookie('self', value, {maxAge: 604800000});
+        }
+        req.session.self = result[0];
+        res.send({status: 'success'});
+    };
     co(function*() {
         var nameResult = yield User.fetchByName(name);
         if (nameResult.length <= 0) {
@@ -102,25 +126,19 @@ exports.login = function (req, res) {
         }
     });
 };
-var loginHandler = function (result, req, res, value, key) {
-    if (key !== result[0].Password) {
-        return res.send({status: 'error', message: '密码不正确'});
-    }
-    if (req.body.save === 'save') {
-        res.cookie('self', value, {maxAge: 604800000});
-    }
-    req.session.self = result[0];
-    res.send({status: 'success'});
-};
 
-//用户登出
+/**
+ * 用户登出
+ */
 exports.logout = function (req, res) {
     req.session.self = null;
     res.clearCookie('self', {});
     return res.redirect(req.headers.referer);
 };
 
-//用户注册
+/**
+ * 用户注册
+ */
 exports.register = function (req, res) {
     var user = new User({
         NickName: req.body.name,
@@ -156,7 +174,9 @@ exports.register = function (req, res) {
     });
 };
 
-//用户验证
+/**
+ * 用户验证
+ */
 exports.verify = function (req, res) {
     var uid = req.query.uid;
     var key = req.query.key;
@@ -169,7 +189,9 @@ exports.verify = function (req, res) {
     });
 };
 
-//发表心情
+/**
+ * 发表心情
+ */
 exports.saveMood = function (req, res) {
     var mood = new Mood({
         UserId: req.body.uid,
@@ -182,7 +204,9 @@ exports.saveMood = function (req, res) {
     });
 };
 
-//保存信息
+/**
+ * 保存信息
+ */
 exports.saveConfig = function (req, res) {
     var store = req.body;
     User.setInfo(store.id, store.name, store.email, store.portrait, store.gender, store.location, store.job).then(function(result){
@@ -196,7 +220,9 @@ exports.saveConfig = function (req, res) {
     });
 };
 
-//用户名是否可用
+/**
+ * 用户名是否可用
+ */
 exports.isExistsUser = function (req, res) {
     var uid = req.query.id || '';
     var field = req.query.field;
@@ -237,4 +263,22 @@ exports.isExistsUser = function (req, res) {
         }
     };
     isExistsHandler(res, uid, field, type);
+};
+
+/**
+ * 分页获取用户文章
+ */
+exports.getArticles = function(req, res){
+    Article.fetchsByUser(req.params.id, req.params.index).then(function(result){
+        result.length > 0 ? res.json(result): res.json([]);
+    });
+};
+
+/**
+ * 分页获取用户心情
+ */
+exports.getMoods = function(req, res){
+    Mood.fetchsByUser(req.params.id, req.params.index).then(function(result){
+        result.length > 0 ? res.json(result): res.json([]);
+    });
 };
