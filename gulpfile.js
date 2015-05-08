@@ -12,8 +12,14 @@ var minifycss = require('gulp-minify-css');
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
 
-
 var reload = browserSync.reload;
+
+var fileConf = {
+    js: 'public/js/*/*.js',
+    css: 'public/css/*.css',
+    dest: 'public/build',
+    view: 'views/*/*.html'
+};
 
 var getEntries = function (dir, parentDir) {
     var result = {};
@@ -69,28 +75,28 @@ var webpackConfig = {
 };
 
 gulp.task('webpack', function () {
-    return gulp.src('public/js/*/*.js')
+    return gulp.src(fileConf.js)
         .pipe(gulpWebpack(webpackConfig))
-        .pipe(gulp.dest('public/build'));
+        .pipe(gulp.dest(fileConf.dest));
 });
 
 gulp.task('minjs', function () {
-    return gulp.src('public/build/**.js')
+    return gulp.src('public/build/*/*.js')
         .pipe(uglify())
         //.pipe(rename(function (path) {
         //    path.basename += '.min';
         //}))
-        .pipe(gulp.dest('public/build'));
+        .pipe(gulp.dest(fileConf.dest));
 });
 
 gulp.task('mincss', function () {
-    return gulp.src('public/css/*.css')
+    return gulp.src(fileConf.css)
         .pipe(autoprefixer())
         .pipe(minifycss())
         //.pipe(rename({
         //    suffix: '.min'
         //}))
-        .pipe(gulp.dest('public/build'));
+        .pipe(gulp.dest(fileConf.dest));
 });
 
 gulp.task('server', function () {
@@ -108,16 +114,21 @@ gulp.task('server', function () {
     });
 });
 
-gulp.task('browserSync', function () {
-    browserSync.init({
-        proxy: "localhost:3000"
-        //server:{
-        //    baseDir: './'
-        //}
-    });
-    return gulp.watch(['views/*/*.html', 'public/js/*/*.js', 'public/css/*.css']).on('change', reload);
+gulp.task('watch', function () {
+    //browserSync.init({
+    //    proxy: "localhost:3000"
+    //    //server:{
+    //    //    baseDir: './'
+    //    //}
+    //});
+
+    gulp.watch(fileConf.js, ['webpack']);
+
+    //gulp.watch([fileConf.view, fileConf.js, fileConf.css]).on('change', reload);
 });
 
 gulp.task('minify', ['minjs', 'mincss']);
+
+gulp.task('build', ['webpack', 'minify']);
 
 gulp.task('default', ['server']);

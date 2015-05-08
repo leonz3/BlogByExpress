@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+//var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -21,10 +22,11 @@ app.engine('.html', exphbs({
 }));
 app.set('view engine', 'html');
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+//app.use(favicon(__dirname + '/public/img/favicon.icon'));
+app.use(bodyParser.json({limit:'10mb'}));
+app.use(bodyParser.urlencoded({limit: '10mb', extended: false}));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'leon',
     resave: false,

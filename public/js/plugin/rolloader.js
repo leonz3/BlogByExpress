@@ -1,33 +1,40 @@
-var getWindowHeight = function () {
-    return window.innerHeight ? window.innerHeight :
-        document.documentElement && document.documentElement.clientHeight ? document.documentElement.clientHeight :
-            document.body.clientHeight;
-};
 
-var getScrollTop = function () {
-    return window.pageYOffset ? pageYOffset :
-        document.documentElement && document.documentElement.scrollTop ? document.documentElement.scrollTop :
-            document.body.scrollTop;
-};
+var measure = require('../plugin/measure.js')
 
-var Rolloader = function (id, callback) {
+var monitor = function (id, callback) {
     var elem = document.getElementById(id);
-    var windowHeight = getWindowHeight();
+    var windowHeight = measure.windowHeight();
 
     this.index = 1;
     this.isEnd = false;
 
+    this.setText = function(txt){
+        elem.innerHTML = txt;
+        return this;
+    };
+
+    this.setClass = function(cls){
+        var clsName = elem.className;
+        if(clsName.indexOf(cls) === -1){
+            elem.className = cls;
+        }
+    };
+
     this.run = function () {
         var _this = this;
+        if(typeof window.onscroll === 'function'){
+            var temporary = window.onscroll;
+        }
         window.onscroll = function () {
-            if (((getScrollTop() + windowHeight) >= elem.offsetTop) && !_this.isEnd) {
-                callback.call(Rolloader, _this);
+            temporary && temporary();
+            if (!_this.isEnd && ((measure.scrollTop() + windowHeight) >= elem.offsetTop)) {
+                callback.call(monitor, _this);
             }
         }
-    }
+    };
 
 };
 
 exports.run = function (id, callback) {
-    new Rolloader(id, callback).run();
+    new monitor(id, callback).run();
 };

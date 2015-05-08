@@ -2,9 +2,9 @@
     <li ><a href="/1"><span class="glyphicon glyphicon-menu-left pull-left"></span>NodeJS</a></li>
     <li ><a href="/2"><span class="glyphicon glyphicon-menu-left pull-left"></span>Python</a></li>
     <li ><a href="/3"><span class="glyphicon glyphicon-menu-left pull-left"></span>Javascript</a></li>
-    <li ><a href="/4"><span class="glyphicon glyphicon-menu-left pull-left"></span>HTML&CSS</a></li>
-    <li ><a href="/5"><span class="glyphicon glyphicon-menu-left pull-left"></span>SQL&Cache</a></li>
-    <li ><a href="/about"><span class="glyphicon glyphicon-menu-left pull-left"></span>About</a></li>
+    <li ><a href="/4"><span class="glyphicon glyphicon-menu-left pull-left"></span>Web</a></li>
+    <li ><a href="/5"><span class="glyphicon glyphicon-menu-left pull-left"></span>Database</a></li>
+    <!--<li ><a href="/about"><span class="glyphicon glyphicon-menu-left pull-left"></span>About</a></li>-->
 </ul>
 
 <a href="javascript:void(0);" class="btn btn-success btn-block btn-publish">我要发表文章</a>
@@ -13,7 +13,7 @@
     <div class="panel-heading">本周评论排行榜</div>
     <div class="panel-body list-group">
         {{#topList.byComment}}
-        <a class="list-group-item" href="/a{{ArticleId}}">{{Title}}</a>
+        <a class="list-group-item" href="/a{{ArticleId}}"><span class="badge">{{add @index 1}}</span>{{Title}}</a>
         {{/topList.byComment}}
     </div>
 </div>
@@ -21,7 +21,7 @@
     <div class="panel-heading">本周浏览排行榜</div>
     <div class="panel-body list-group">
         {{#topList.byHit}}
-        <a class="list-group-item" href="/a{{ArticleId}}">{{Title}}</a>
+        <a class="list-group-item" href="/a{{ArticleId}}"><span class="badge">{{add @index 1}}</span>{{Title}}</a>
         {{/topList.byHit}}
     </div>
 </div>

@@ -2,11 +2,19 @@
 require('../plugin/popup.js');
 
 var userId = function () {
-    return $('.user').length > 0 ? $('.user').attr('data-id').trim() : '';
+    try{
+        return $('.user').attr('data-id').trim()
+    }catch(e){
+        return '';
+    }
 }();
 
 var currMood = function () {
-    return $('.txt-mood').val().trim();
+    try{
+        return $('.txt-mood').val().trim();
+    }catch(e){
+        return '';
+    }
 }();
 
 var rmHandler = function (args) {
@@ -93,14 +101,14 @@ var downCollection = function (aid, uid, $root) {
 
 
 exports.rmArticle = function(){
-    $('.btn-delete-article').on('click', function () {
+    $('.list-articles').on('click', '.btn-delete-article', function () {
         var aid = $(this).attr('data-id');
         downArticle(aid, userId, $(this).parents('.media'));
     });
 };
 
 exports.downCollect = function(){
-    $('.btn-delete-collect').on('click', function () {
+    $('.list-collections').on('click', '.btn-delete-collect', function () {
         var aid = $(this).attr('data-id');
         downCollection(aid, userId, $(this).parents('li'));
     });

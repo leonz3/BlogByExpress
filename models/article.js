@@ -10,6 +10,7 @@ var Article = function (article) {
     this.CategoryId = article.CategoryId;
     this.Intro = article.Intro;
     this.Source = article.Source;
+    this.Author = article.Author;
 };
 
 /**
@@ -17,7 +18,7 @@ var Article = function (article) {
  */
 Article.fetchById = function (id) {
     return db.execute({
-        sql: 'select ArticleId,Title,PublishTime,ScanTimes,Content,Intro,Source,UserId,CategoryId from articles where ArticleId=?',
+        sql: 'select a.ArticleId,a.Title,a.PublishTime,a.ScanTimes,a.Content,a.Intro,a.Source,a.UserId,a.CategoryId,u.NickName as Author from articles a,users u where a.UserId=u.UserId AND ArticleId=?',
         values: [id]
     });
 };
@@ -26,11 +27,11 @@ Article.fetchById = function (id) {
  * 通过用户ID分页获取用户下无分类文章
  */
 Article.fetchsByUser = function (uid, index) {
-    var sql = 'select a.ArticleId,a.Title,a.PublishTime,a.Intro,u.UserId from articles a left join users u on a.userId=u.UserId where u.userid=? order by a.PublishTime desc limit ?,?';
+    var sql = 'select a.ArticleId,a.Title,a.PublishTime,a.Intro,u.UserId from articles a left join users u on a.userId=u.UserId where u.userid=? order by a.ArticleId desc limit ?,?';
     var start = (~~index - 1) * 10;
     return db.execute({
         sql: sql,
-        values: [uid, start, start + 10]
+        values: [uid, start, 10]
     });
 
 };
@@ -41,12 +42,12 @@ Article.fetchsByUser = function (uid, index) {
 Article.fetchsByCategory = function (cid, index) {
     var sql = 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId = u.UserId'
     var start = ~~index === 1 ? 0 : 20 + (index - 2) * 10;
-    var end = ~~index === 1 ? start + 20 : start + 10;
+    var size = ~~index === 1 ? 20 : 10;
     if (cid) {
         sql += ' where CategoryId=?';
-        var vals = [cid, start, end];
+        var vals = [cid, start, size];
     } else {
-        var vals = [start, end];
+        var vals = [start, size];
     }
     sql += ' order by a.PublishTime desc limit ?,?';
     return db.execute({
@@ -58,9 +59,14 @@ Article.fetchsByCategory = function (cid, index) {
 /**
  * 关键字搜索
  */
-Article.fetchsByKey = function (key) {
+Article.fetchsByKey = function (key, index) {
+    if(!index){
+        var index = 1;
+    }
+    var start = (~~index - 1) * 10;
     return db.execute({
-        sql: 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId=u.UserId where a.Title like "%' + key + '%" or a.Intro like "%' + key + '%"'
+        sql: 'select a.ArticleId,a.Title,a.Intro,a.CategoryId,u.UserId,u.Portrait,u.NickName from articles a left join users u on a.UserId=u.UserId where a.Title like "%' + key + '%" or a.Intro like "%' + key + '%" order by a.ArticleId desc limit ?,?',
+        values: [start, 10]
     });
 };
 

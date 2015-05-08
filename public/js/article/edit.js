@@ -1,5 +1,5 @@
-
 require('../partial/header.js');
+require('../plugin/popup.js');
 var simditor = require('../plugin/simditor.js');
 
 var $slc = $('#slc_cid');
@@ -13,7 +13,7 @@ var Article = {
                 if (_val) {
                     return _val;
                 } else {
-                    throw  new Error();
+                    throw  new Error('no user');
                 }
             }(),
             aid: function () {
@@ -28,7 +28,7 @@ var Article = {
             title: function () {
                 var _val = $('#txt_title').val().trim();
                 if (!_val) {
-                    throw new Error('文章标题不能为空');
+                    throw new Error('请填写文章标题！');
                 } else {
                     return _val;
                 }
@@ -36,7 +36,7 @@ var Article = {
             content: function () {
                 var _val = $('#txt_editor').val().trim();
                 if (!_val) {
-                    throw new Error('文章内容不能为空');
+                    throw new Error('请填写文章内容！');
                 } else {
                     return _val;
                 }
@@ -51,9 +51,13 @@ var Article = {
         try {
             _this.getData();
         } catch (e) {
+            if (e.message === 'no user') {
+                $('#sign').modal('show').find('.text-danger').html('请先进行登录！').removeClass('hide');
+            } else {
+                $('.txt-help').html(e.message).removeClass('hide');
+            }
             return;
         }
-        console.log(_this.store);
         $.ajax({
             url: '/article/save',
             type: 'post',
@@ -69,7 +73,9 @@ var Article = {
 
 ~function () {
     var cid = $slc.attr('data-category');
-    $slc.val(cid);
+    if (cid) {
+        $slc.val(cid);
+    }
     var source = $('#chk_source').attr('data-source');
     $(':radio').each(function () {
         if (this.value == source) {

@@ -11,11 +11,11 @@ var Mood = function (mood) {
  * 通过用户ID分页获取用户心情
  */
 Mood.fetchsByUser = function (uid, index) {
-    var sql = 'select m.MoodId,m.Content,m.PublishTime,u.UserId from user_moods m left join users u on m.userId=u.userId where u.userid=? order by PublishTime desc limit ?,?';
+    var sql = 'select m.MoodId,m.Content,m.PublishTime,u.UserId from user_moods m left join users u on m.userId=u.userId where u.userid=? order by m.MoodId desc limit ?,?';
     var start = (~~index - 1) * 20;
     return db.execute({
         sql: sql,
-        values: [uid, start, start + 20]
+        values: [uid, start, 20]
     });
 };
 

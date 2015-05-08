@@ -1,27 +1,36 @@
 var User = require('../models/user');
 
-//自动登录
+/**
+ * 自动登录
+ */
 exports.autoLogin = function (req, res, next) {
-    var username = req.cookies.self || '';
-    if (username && !req.session.self) {
-        User.fetchByName(username).then(function(result){
+    var baseName = req.cookies.self || '';
+    if (baseName && !req.session.self) {
+        var name = new Buffer(decodeURIComponent(baseName), 'base64').toString();
+        User.fetchByName(name).then(function(result){
             if(result.length > 0){
                 req.session.self = result[0];
             }
             next();
         });
+    }else{
+        next();
     }
-    next();
 };
 
-//是否已登录
+/**
+ * 是否已登录
+ */
 exports.isLogin = function(req, res, next){
     req.session.self? true: false;
 }
 
-//获取访问用户对象
+/**
+ * 获取访问用户对象
+ */
 exports.checkTarget = function (req, res, next) {
-    User.getIntro(req.params.id).then(function(result){
+    var matched = req.path.match(/^\/u(\d+)/);
+    User.getIntro(matched[1]).then(function(result){
         if (result.length > 0) {
             req.target = result[0];
             next();
@@ -31,8 +40,14 @@ exports.checkTarget = function (req, res, next) {
     });
 };
 
-//访问对象是否是登录用户
+/**
+ * 访问对象是否是登录用户
+ */
 exports.isSelf = function (req, res, next) {
-    req.isSelf = req.target.UserId === req.session.self.UserId ? 1 : 0;
+    if(!req.session.self){
+        req.isSelf = false;
+    }else{
+        req.isSelf = req.target.UserId === req.session.self.UserId ? true : false;
+    }
     next();
 };

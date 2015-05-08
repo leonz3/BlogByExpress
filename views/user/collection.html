@@ -5,10 +5,14 @@
             {{#articles}}
             <li>
                 <a href="/a{{ArticleId}}">{{Title}}</a>
-                <a href="javascript:void(0);" class="btn-delete-collect hide small text-muted" data-id="{{ArticleId}}">取消收藏</a>
+                {{#if ../isSelf}}
+                    <a href="javascript:void(0);" class="btn-delete-collect hide small text-danger" data-id="{{ArticleId}}">取消收藏</a>
+                {{/if}}
             </li>
             {{/articles}}
         </ul>
+        <div id="rolloader">
+        </div>
     </div>
 </div>
 <script src="/build/user/collection.js"></script>

@@ -2,16 +2,19 @@
 
 <div class="container">
     <div class="row col-md-11">
-        {{#moods}}
-        <h3 class="page-header">今天</h3>
-        <div class="media">
-            <div class="media-body">
-                {{Content}}
-            </div>
-            <div class="media-right">{{formatDate PublishTime}}</div>
+        <ul class="list-moods list-unstyled">
+            <!--{{#moods}}-->
+            <!--&lt;!&ndash;<h3 class="page-header">今天</h3>&ndash;&gt;-->
+            <!--<li class="media">-->
+                <!--<small class="pull-right">{{formatDate PublishTime}}</small>-->
+                <!--<div class="media-body">-->
+                    <!--{{Content}}-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--{{/moods}}-->
+        </ul>
+        <div id="rolloader">
         </div>
-        <hr/>
-        {{/moods}}
     </div>
 </div>
-<script src="/build/user/article.js"></script>
+<script src="/build/user/mood.js"></script>

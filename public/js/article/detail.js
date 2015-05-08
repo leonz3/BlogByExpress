@@ -1,16 +1,27 @@
-
 require('bootstrap/tooltip.js');
 require('../partial/header.js');
+require('../partial/aside.js');
 require('../plugin/popup.js');
 var simditorLite = require('../plugin/simditorlite.js');
 
 
-var isSignIn = function(cb){
-    if($('.user').length > 0){
+var isSignIn = function (cb) {
+    if ($('.user').length > 0) {
         cb();
-    }else{
+    } else {
         $('#sign').modal('show').find('.text-danger').html('请先进行登录！').removeClass('hide');
     }
+};
+
+var formatDate = function(time){
+    var date = new Date(time);
+    var ymd = time.substring(0,10);
+    var hms = [date.getHours(), date.getMinutes(), date.getSeconds()];
+    for(var i = 0; i < 3; i ++){
+        var item = hms[i].toString();
+        hms[i] = item.length > 1? item: '0' + item;
+    }
+    return ymd + ' ' + hms.join(':');
 };
 
 var Article = {
@@ -20,50 +31,66 @@ var Article = {
     type: 'post',
     data: {},
     currNums: 0,
+    currCommentIndex: 1,
+    hasComment: true,
     isSuccess: false,
     run: function () {
         var _this = this;
+
+        if($('.list-comments li').length === 0){
+            $('#rolloader').html('暂无评论...');
+            _this.hasComment = false;
+        }
+
         $('.btn-collect').bind('click', function () {
-            isSignIn(function(){
-                var $this = $(this);
-                if ($this.hasClass('actived')) {
-                    return false;
-                }
+            var $this = $(this);
+            isSignIn(function () {
+                //if ($this.hasClass('disabled')) {
+                //    return false;
+                //}
                 var $nums = $('.collection-nums');
                 var _nums = parseInt($nums.html());
-                _this.getId().collect().submit(function () {
-                    $nums.html(_nums + 1);
-                    $this.addClass('actived').attr({'title': '已收藏', 'data-original-title': '已收藏'});
+                _this.getId().collect().submit(function (result) {
+                    if (result === 'success') {
+                        $nums.html(_nums + 1);
+                        $this.addClass('disabled').attr({'title': '已收藏', 'data-original-title': '已收藏'});
+                    }
                 });
-            }).call(this);
+            });
         });
+
         $('.btn-praise').bind('click', function () {
-            isSignIn(function(){
-                var $this = $(this);
-                if ($this.hasClass('actived')) {
-                    return false;
-                }
+            var $this = $(this);
+            isSignIn(function () {
+                //if ($this.hasClass('disabled')) {
+                //    return false;
+                //}
                 var $nums = $('.praise-nums');
                 var _nums = parseInt($nums.html());
-                _this.getId().praise().submit(function () {
-                    $nums.html(_nums + 1);
-                    $this.addClass('actived').attr({'title': '已点赞', 'data-original-title': '已点赞'});
+                _this.getId().praise().submit(function (result) {
+                    if (result === 'success') {
+                        $nums.html(_nums + 1);
+                        $this.addClass('disabled').attr({'title': '已点赞', 'data-original-title': '已点赞'});
+                    }
                 });
-            }).call(this);
+            });
         });
+
         $('.btn-comment').bind('click', function () {
-            isSignIn(function(){
+            isSignIn(function () {
                 //var $comments = $('.commnet-nums');
                 //var _nums = parseInt($comments.html());
-                _this.getId().newComment().submit(function () {
-                    //$comments.html(_nums + 1);
-                    //_this.appendComment();
-                    window.location.reload();
+                _this.getId().newComment().submit(function (result) {
+                    if (result === 'success') {
+                        //$comments.html(_nums + 1);
+                        //_this.appendComment();
+                        window.location.reload();
+                    }
                 });
             }).call(this);
         });
 
-        $('.btn-delete-comment').on('click', function () {
+        $('.list-comments').on('click', '.btn-delete-comment', function () {
             var cid = $(this).attr('data-id');
             $.popup({
                 title: '提示',
@@ -72,17 +99,33 @@ var Article = {
                 yep: {
                     txt: '确定',
                     callback: function () {
-                        _this.getId().rmComment(cid).submit(function () {
-                            window.location.reload();
+                        _this.getId().rmComment(cid).submit(function (result) {
+                            if (result === 'success') {
+                                window.location.reload();
+                            }
                         });
                     }
                 }
             }).show();
         });
+
+        $('#rolloader').on('click', function () {
+            if (!_this.hasComment) return false;
+            var $this = $(this);
+            _this.getId().getComment().submit(function (result) {
+                if (result.length > 0) {
+                    _this.appendComment(result);
+                }
+                if(result.length < 10){
+                    $this.html('没有更多评论');
+                    _this.hasComment = false;
+                }
+            });
+        });
     },
     getId: function () {
         this.aid = $('.article-title').attr('data-id').trim();
-        this.uid = $('.user').attr('data-id').trim();
+        this.uid = $('.user').length > 0 ? $('.user').attr('data-id').trim() : '';
         return this;
     },
     praise: function () {
@@ -109,6 +152,11 @@ var Article = {
         this.data = {cid: id, uid: this.uid};
         return this;
     },
+    getComment: function () {
+        this.action = '/comment/' + this.aid + '/' + (++this.currCommentIndex);
+        this.type = 'get';
+        return this;
+    },
     submit: function (callback) {
         var _this = this;
         $.ajax({
@@ -116,20 +164,25 @@ var Article = {
             data: _this.data,
             type: _this.type,
             success: function (data) {
-                if (data === 'success') {
-                    callback();
-                }
+                callback(data);
             }
         });
     },
-    appendComment: function () {
-        //var sportrait = $('.user img').attr('src');
-        //var sname = $('.user a').html().trim()
-        //var shtml = '<li class="media"><div class="media-left"><a href="/u' + this.uid + '">'
-        //            + '<img class="media-object" src="' + sportrait + '"></a></div>'
-        //            + '<div class="media-body"><h4 class="media-heading">' +  sname + '</h4>'
-        //            +  '<p>' + this.data.content + '</p></div></li>';
-        //$('.list-comments').append($(shtml));
+    appendComment: function (data) {
+        var html = '';
+        for (var i = 0, len = data.length; i < len; i++) {
+            var item = data[i];
+            html += '<li class="media">'
+            + '<div class="media-left">'
+            + '<a href="/u' + item['UserId'] + '">'
+            + '<img class="media-object" src="' + item['Portrait'] + '"></a></div>'
+            + '<div class="media-body">'
+            + '<span class="pull-right">' + formatDate(item['PublishTime']) + '</span>'
+            + '<h4 class="media-heading">' + item['NickName'] + '</h4>'
+            + '<a href="javascript:void(0);" class="pull-right hide btn-delete-comment" data-id="' + item['CommentId'] + '">删除该评论</a>'
+            + '<p>' + item['Content'] + '</p></div></li>';
+        }
+        $('.list-comments').append($(html));
     }
 };
 
@@ -140,4 +193,11 @@ var Article = {
 
     Article.run();
 
+    $('.btn-publish').on('click', function () {
+        if ($('.user').length > 0) {
+            window.location.href = '/article/edit';
+        } else {
+            $('#sign').modal('show').find('.text-danger').html('请先进行登录！').removeClass('hide');
+        }
+    });
 }();

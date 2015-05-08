@@ -18,6 +18,10 @@ obj
 *.dat
 *.dat.temp
 
+# visual studio code
+.settings
+typings
+
 # upload files
 public/upload
 

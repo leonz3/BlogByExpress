@@ -74,10 +74,14 @@ User.getDetail = function (id) {
 /**
  * 通过ID获取用户收藏列表
  */
-User.getCollection = function (id) {
+User.getCollection = function (id, index) {
+    if(!index){
+        index = 1;
+    }
+    var start = (~~index -1) * 20;
     return db.execute({
-        sql: 'select u.UserId,a.ArticleId,a.Title from users u left join user_article_collections c on u.UserId=c.UserId left join articles a on c.ArticleId=a.ArticleId where u.UserId=?',
-        values: [id]
+        sql: 'select u.UserId,a.ArticleId,a.Title from users u left join user_article_collections c on u.UserId=c.UserId left join articles a on c.ArticleId=a.ArticleId where u.UserId=? order by ArticleId desc limit ?, ?',
+        values: [id,start, start + 20]
     });
 };
 

@@ -17,7 +17,8 @@ exports.center = function (req, res) {
             self: req.session.self,
             target: target,
             moods: moods,
-            articles: articles
+            articles: articles,
+            isSelf: req.isSelf
         });
     });
 };
@@ -26,29 +27,44 @@ exports.center = function (req, res) {
  * 用户文章视图
  */
 exports.article = function (req, res) {
-    var target = req.target;
-    Article.fetchsByUser(target.UserId, 1).then(function (result) {
-        res.render('user/article', {
-            self: req.session.self,
-            target: target,
-            articles: result
+    var index = req.params.index;
+    if (index) {
+        Article.fetchsByUser(req.params.id, index).then(function (result) {
+            result.length > 0 ? res.json(result) : res.json([]);
         });
-    });
+    } else {
+        var target = req.target;
+        Article.fetchsByUser(target.UserId, 1).then(function (result) {
+            res.render('user/article', {
+                self: req.session.self,
+                target: target,
+                articles: result,
+                isSelf: req.isSelf
+            });
+        });
+    }
 };
 
 /**
  * 用户心情视图
  */
 exports.mood = function (req, res) {
-    var target = req.target;
-    Mood.fetchsByUser(target.UserId, 1).then(function (result) {
-        res.render('user/mood', {
-            self: req.session.self,
-            target: target,
-            moods: result
+    var index = req.params.index;
+    if (index) {
+        Mood.fetchsByUser(req.params.id, index).then(function (result) {
+            result.length > 0 ? res.json(result) : res.json([]);
         });
-    });
-
+    } else {
+        var target = req.target;
+        Mood.fetchsByUser(target.UserId, 1).then(function (result) {
+            res.render('user/mood', {
+                self: req.session.self,
+                target: target,
+                moods: result,
+                isSelf: req.isSelf
+            });
+        });
+    }
 };
 
 /**
@@ -60,7 +76,8 @@ exports.info = function (req, res) {
         res.render('user/info', {
             self: req.session.self,
             target: req.target,
-            user: result[0]
+            user: result[0],
+            isSelf: req.isSelf
         });
     });
 };
@@ -71,29 +88,43 @@ exports.info = function (req, res) {
 exports.config = function (req, res, next) {
     if (!req.isSelf) {
         next();
-    }
-    var target = req.target;
-    User.getDetail(target.UserId).then(function (result) {
-        res.render('user/config', {
-            self: req.session.self,
-            target: req.target,
-            user: result[0]
+    } else {
+        var target = req.target;
+        User.getDetail(target.UserId).then(function (result) {
+            res.render('user/config', {
+                self: req.session.self,
+                target: req.target,
+                user: result[0],
+                isSelf: req.isSelf
+            });
         });
-    });
+    }
 };
 
 /**
  * 用户收藏页视图
  */
-exports.collection = function (req, res) {
-    var target = req.target;
-    User.getCollection(target.UserId).then(function (result) {
-        res.render('user/collection', {
-            self: req.session.self,
-            target: target,
-            articles: result
-        });
-    });
+exports.collection = function (req, res, next) {
+    var index = req.params.index;
+    if (!req.isSelf && !index) {
+        next();
+    } else {
+        if (index) {
+            User.getCollection(req.params.id, index).then(function (result) {
+                result.length > 0 ? res.json(result) : res.json([]);
+            });
+        } else {
+            var target = req.target;
+            User.getCollection(target.UserId).then(function (result) {
+                res.render('user/collection', {
+                    self: req.session.self,
+                    target: target,
+                    articles: result,
+                    isSelf: req.isSelf
+                });
+            });
+        }
+    }
 };
 
 /**
@@ -107,7 +138,8 @@ exports.login = function (req, res) {
             return res.send({status: 'error', message: '密码不正确'});
         }
         if (req.body.save === 'save') {
-            res.cookie('self', value, {maxAge: 604800000});
+            var baseVal = encodeURIComponent(new Buffer(value).toString('base64'));
+            res.cookie('self', baseVal, {maxAge: 1000 * 60 * 60 * 24 * 15});
         }
         req.session.self = result[0];
         res.send({status: 'success'});
@@ -209,12 +241,12 @@ exports.saveMood = function (req, res) {
  */
 exports.saveConfig = function (req, res) {
     var store = req.body;
-    User.setInfo(store.id, store.name, store.email, store.portrait, store.gender, store.location, store.job).then(function(result){
-        if(result.affectedRows > 0){
+    User.setInfo(store.id, store.name, store.email, store.portrait, store.gender, store.location, store.job).then(function (result) {
+        if (result.affectedRows > 0) {
             req.session.self.NickName = store.name;
             req.session.self.Portrait = store.portrait;
             res.send('success');
-        }else{
+        } else {
             res.send('error');
         }
     });
@@ -265,20 +297,3 @@ exports.isExistsUser = function (req, res) {
     isExistsHandler(res, uid, field, type);
 };
 
-/**
- * 分页获取用户文章
- */
-exports.getArticles = function(req, res){
-    Article.fetchsByUser(req.params.id, req.params.index).then(function(result){
-        result.length > 0 ? res.json(result): res.json([]);
-    });
-};
-
-/**
- * 分页获取用户心情
- */
-exports.getMoods = function(req, res){
-    Mood.fetchsByUser(req.params.id, req.params.index).then(function(result){
-        result.length > 0 ? res.json(result): res.json([]);
-    });
-};

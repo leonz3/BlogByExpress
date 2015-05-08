@@ -9,17 +9,23 @@
             </div>
             <div class="media-body">
                 <h3 class="media-heading">{{target.NickName}}</h3>
+                {{#if isSelf}}
                 <p class="clearfix">
                     <input type="text" value="{{target.Mood}}" class="txt-mood"/>
                     <button class="btn btn-save-mood hide">发表心情</button>
                 </p>
+                {{else}}
+                    <p class="clearfix">{{target.Mood}}</p>
+                {{/if}}
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li><a href="/u{{target.UserId}}">首页</a></li>
+            <li><a href="/u{{target.UserId}}">主页</a></li>
             <li><a href="/u{{target.UserId}}/article">文章</a></li>
             <li><a href="/u{{target.UserId}}/mood">心情</a></li>
-            <li><a href="/u{{target.UserId}}/collection">收藏</a></li>
+            {{#if isSelf}}
+                <li><a href="/u{{target.UserId}}/collection">收藏</a></li>
+            {{/if}}
             <li><a href="/u{{target.UserId}}/info">资料</a></li>
         </ul>
     </div>

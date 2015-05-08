@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row col-md-10">
+    <div class="row col-md-10 col-md-offset-1">
         <h2 class="page-header">发表文章</h2>
         <div class="form-horizontal">
             <input type="hidden" name="UserId" id="txt_uid" value="{{self.UserId}}"/>
@@ -14,11 +14,11 @@
                 <label for="category" class="pull-left">文章分类</label>
                 <div class="col-sm-5">
                     <select class="form-control" name="category" id="slc_cid" data-category="{{article.CategoryId}}">
-                        <option value="1" >NodeJS</option>
+                        <option selected value="1">NodeJS</option>
                         <option value="2">Python</option>
                         <option value="3">Javascript</option>
-                        <option value="4">HTML&CSS</option>
-                        <option value="5">SQL&Cache</option>
+                        <option value="4">Web</option>
+                        <option value="5">Database</option>
                     </select>
                 </div>
             </div>
@@ -30,7 +30,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-warning" id="btn_save">保存</button>
+                <p class="text-danger hide txt-help"></p>
+                <button class="btn btn-primary" id="btn_save">保存</button>
             </div>
         </div>
     </div>

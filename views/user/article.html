@@ -1,18 +1,24 @@
 {{> cover}}
 <div class="container margin-top-60">
     <div class="row col-md-11 list-articles">
-        <a class="btn btn-success" href="/article/edit">我要发表</a>
+        {{#if isSelf}}
+            <a class="btn btn-success" href="/article/edit">我要发表</a>
+        {{/if}}
         {{#articles}}
         <div class="media">
             <div class="media-body">
+                <small class="pull-right">{{formatDate PublishTime}}</small>
                 <a class="media-heading" href="/a{{ArticleId}}">{{Title}}</a>
-                <a href="javascript:void(0);" class="btn-delete-article small hide text-muted" data-id="{{ArticleId}}">删除</a>
+                {{#if ../isSelf}}
+                    <a href="/a{{ArticleId}}/edit" class="btn-edit-article small hide text-warning" >编辑</a>
+                    <a href="javascript:;" class="btn-delete-article small hide text-danger" data-id="{{ArticleId}}">删除</a>
+                {{/if}}
                 <p>{{Intro}}</p>
             </div>
             <hr/>
         </div>
         {{/articles}}
-        <div id="rolloader" style="height:10px;width:100%;">
+        <div id="rolloader">
         </div>
     </div>
 </div>

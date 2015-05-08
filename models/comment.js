@@ -13,10 +13,14 @@ var Comment = function(comment){
 /**
  * 根据文章ID获取评论
  */
-Comment.fetchsByRootId = function(rid){
+Comment.fetchsByRootId = function(rid, index){
+    if(!index){
+        index = 1;
+    }
+    var start = (~~index - 1) * 10;
     return db.execute({
-        sql:'select c.CommentId,c.PublishTime,c.Content,u.UserId,c.ParentId,u.Portrait,u.NickName from comments c right join users u on c.UserId=u.UserId where RootId=?',
-        values:[rid]
+        sql:'select c.CommentId,c.PublishTime,c.Content,u.UserId,c.ParentId,u.Portrait,u.NickName from comments c right join users u on c.UserId=u.UserId where RootId=? order by c.CommentId desc limit ?,?',
+        values:[rid, start, 10]
     })
 };
 

@@ -16,6 +16,11 @@ exports.detail = function (req, res) {
         var comments = yield Comment.fetchsByRootId(id);
         var userHandler = yield article.isOperateByUser(1);
         var topList = yield Article.getTopList(days);
+        if (user) {
+            var isSelf = user.UserId == article.UserId ? true : false;
+        } else {
+            var isSelf = false;
+        }
         article.scanned();
         res.render('article/detail', {
             self: user,
@@ -23,7 +28,8 @@ exports.detail = function (req, res) {
             comments: comments,
             statist: statistics,
             topList: topList,
-            userHandler: userHandler
+            userHandler: userHandler,
+            isSelf: isSelf
         });
     });
 };
@@ -35,11 +41,11 @@ exports.edit = function (req, res) {
     var id = req.params.id || '';
     var article = null;
     if (/^\d+$/g.test(id)) {
-        Article.fetchById(id).then(function(result){
-            if(result.length > 0){
-                res.render('article/edit',{
-                    self:req.session.self,
-                    article:result[0]
+        Article.fetchById(id).then(function (result) {
+            if (result.length > 0) {
+                res.render('article/edit', {
+                    self: req.session.self,
+                    article: result[0]
                 })
             }
         });
@@ -64,10 +70,10 @@ exports.save = function (req, res) {
         Source: req.body.source,
         PublishTime: new Date()
     });
-    article.save().then(function(result){
-        if(result.affectedRows > 0){
+    article.save().then(function (result) {
+        if (result.affectedRows > 0) {
             res.json({status: 'success', id: (article.ArticleId ? article.ArticleId : result.insertId)});
-        }else{
+        } else {
             res.json({status: 'error'});
         }
     });
@@ -77,8 +83,8 @@ exports.save = function (req, res) {
  * 文章删除
  */
 exports.delete = function (req, res) {
-    Article.delete(req.params.id, req.body.uid).then(function(result){
-        if(result.affectedRows > 0){
+    Article.delete(req.params.id, req.body.uid).then(function (result) {
+        if (result.affectedRows > 0) {
             res.send('success');
         }
     });
@@ -88,8 +94,8 @@ exports.delete = function (req, res) {
  * 文章收藏
  */
 exports.upCollection = function (req, res) {
-    Article.upCollection(req.body.uid, req.body.aid).then(function(result){
-        if(result.affectedRows > 0){
+    Article.upCollection(req.body.uid, req.body.aid).then(function (result) {
+        if (result.affectedRows > 0) {
             res.send('success');
         }
     });
@@ -99,19 +105,19 @@ exports.upCollection = function (req, res) {
  * 删除收藏
  */
 exports.downCollection = function (req, res) {
-    Article.downCollection(req.body.uid, req.body.aid).then(function(result){
-            if(result.affectedRows > 0){
-                res.send('success');
-            }
-        });
+    Article.downCollection(req.body.uid, req.body.aid).then(function (result) {
+        if (result.affectedRows > 0) {
+            res.send('success');
+        }
+    });
 };
 
 /**
  * 文章点赞
  */
 exports.upPraise = function (req, res) {
-    Article.upPraise(req.body.uid,req.body.aid).then(function(result){
-        if(result.affectedRows > 0){
+    Article.upPraise(req.body.uid, req.body.aid).then(function (result) {
+        if (result.affectedRows > 0) {
             res.send('success');
         }
     });
@@ -126,8 +132,8 @@ exports.upComment = function (req, res) {
         UserId: req.body.uid,
         RootId: req.body.aid
     });
-    comment.save().then(function(result){
-        if(result.affectedRows > 0){
+    comment.save().then(function (result) {
+        if (result.affectedRows > 0) {
             res.send('success');
         }
     });
@@ -137,9 +143,18 @@ exports.upComment = function (req, res) {
  * 删除评论
  */
 exports.downComment = function (req, res) {
-    Comment.delete(req.body.cid, req.body.uid).then(function(result){
-        if(result.affectedRows > 0){
+    Comment.delete(req.body.cid, req.body.uid).then(function (result) {
+        if (result.affectedRows > 0) {
             res.send('success');
         }
+    });
+};
+
+/**
+ * 分页获取评论
+ */
+exports.getComment = function (req, res) {
+    Comment.fetchsByRootId(req.params.aid, req.params.index).then(function (result) {
+        result.length > 0 ? res.json(result) : res.json([]);
     });
 };
