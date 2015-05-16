@@ -14,6 +14,7 @@ exports.center = function (req, res) {
         var articles = yield Article.fetchsByUser(target.UserId, 1);
         var moods = yield Mood.fetchsByUser(target.UserId, 1);
         res.render('user/center', {
+            title: target.NickName + '的主页',
             self: req.session.self,
             target: target,
             moods: moods,
@@ -36,6 +37,7 @@ exports.article = function (req, res) {
         var target = req.target;
         Article.fetchsByUser(target.UserId, 1).then(function (result) {
             res.render('user/article', {
+                title: target.NickName + '的文章',
                 self: req.session.self,
                 target: target,
                 articles: result,
@@ -58,6 +60,7 @@ exports.mood = function (req, res) {
         var target = req.target;
         Mood.fetchsByUser(target.UserId, 1).then(function (result) {
             res.render('user/mood', {
+                title: target.NickName + '的心情',
                 self: req.session.self,
                 target: target,
                 moods: result,
@@ -74,6 +77,7 @@ exports.info = function (req, res) {
     var target = req.target;
     User.getDetail(target.UserId).then(function (result) {
         res.render('user/info', {
+            title: target.NickName + '的资料',
             self: req.session.self,
             target: req.target,
             user: result[0],
@@ -87,11 +91,12 @@ exports.info = function (req, res) {
  */
 exports.config = function (req, res, next) {
     if (!req.isSelf) {
-        next();
+        res.redirect('/');
     } else {
         var target = req.target;
         User.getDetail(target.UserId).then(function (result) {
             res.render('user/config', {
+                title: '修改信息',
                 self: req.session.self,
                 target: req.target,
                 user: result[0],
@@ -117,6 +122,7 @@ exports.collection = function (req, res, next) {
             var target = req.target;
             User.getCollection(target.UserId).then(function (result) {
                 res.render('user/collection', {
+                    title: target.NickName + '的收藏',
                     self: req.session.self,
                     target: target,
                     articles: result,
@@ -134,13 +140,15 @@ exports.login = function (req, res) {
     var password = utils.generateMd5(req.body.password);
     var name = req.body.name;
     var loginHandler = function (result, req, res, value, key) {
-        if (key !== result[0].Password) {
+        var user = new User(result[0]);
+        if (key !== user.Password) {
             return res.send({status: 'error', message: '密码不正确'});
         }
         if (req.body.save === 'save') {
             var baseVal = encodeURIComponent(new Buffer(value).toString('base64'));
             res.cookie('self', baseVal, {maxAge: 1000 * 60 * 60 * 24 * 15});
         }
+        user.logged();
         req.session.self = result[0];
         res.send({status: 'success'});
     };
@@ -175,7 +183,8 @@ exports.register = function (req, res) {
     var user = new User({
         NickName: req.body.name,
         Email: req.body.email,
-        Password: utils.generateMd5(req.body.password)
+        Password: utils.generateMd5(req.body.password),
+        Portrait: '/img/icon_default_head.png'
     });
     co(function*() {
         var isNameExist = yield User.fetchByName(user.NickName);
@@ -191,6 +200,7 @@ exports.register = function (req, res) {
                     res.send({status: 'error', message: '网络错误，注册失败'});
                 } else {
                     user.UserId = saveResult.uid;
+                    user.logged();
                     req.session.self = user;
                     mailer.send(user, function (err, info) {
                         if (err) {
@@ -297,3 +307,24 @@ exports.isExistsUser = function (req, res) {
     isExistsHandler(res, uid, field, type);
 };
 
+/**
+ * 更改密码
+ */
+exports.updatePassword = function(req,res){
+    var uid = req.params.id;
+    co(function*(){
+        var user = new User((yield User.fetchById(uid))[0]);
+        var orgPwd = utils.generateMd5(req.body.orgPwd);
+        if(orgPwd !== user.Password){
+            res.send({error:true, msg: 'wrong'});
+        }else{
+            user.Password = utils.generateMd5(req.body.newPwd);
+            var saveResult = yield user.save();
+            if(saveResult){
+                res.send({error:false});
+            }else{
+                res.send({error:true, msg:'error'});
+            }
+        }
+    });
+};

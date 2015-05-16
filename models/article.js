@@ -92,7 +92,7 @@ Article.prototype.save = function () {
  */
 Article.delete = function (aid, uid) {
     return db.execute({
-        sql: 'delete from articles where ArticleId=? And UserId=?',
+        sql: 'call rmArticle(?,?)',
         values: [aid, uid]
     });
 };
@@ -164,6 +164,7 @@ Article.prototype.isOperateByUser = function (uid) {
         sql: 'call isOperatedByUser(?,?)',
         values: [uid, this.ArticleId],
         handler: function (result, resolve, reject) {
+            console.log(result[0], result[1])
             var isPraised = result[0].length > 0 ? true : false;
             var isCollected = result[1].length > 0 ? true : false;
             resolve({isPraised: isPraised, isCollected: isCollected});

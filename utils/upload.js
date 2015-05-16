@@ -13,10 +13,11 @@ exports.upload = function () {
             return Date.now();
         },
         onFileUploadComplete: function (file, req, res) {
-            /*
+            /**
              * simditor
              */
             res.send({success: true, file_path: 'http://' + req.headers.host + '/upload/' + file.name});
+
             /**
              * kindeditor
              */

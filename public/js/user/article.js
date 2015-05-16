@@ -21,11 +21,11 @@ var formatDate = function(time){
     userHandler.rmArticle();
 
     var isSelf =$('.btn-delete-article').length > 0 ? true : false;
-
+    var url = window.location.href + '/';
     loader.run('rolloader', function (loader) {
         loader.isEnd = true;
         $.ajax({
-            url: '/u1' + '/article/' + (++loader.index),
+            url:  url + (++loader.index),
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {

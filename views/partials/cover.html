@@ -3,19 +3,17 @@
     <div class="container">
         <div class="media">
             <div class="media-left">
-                <a href="#">
-                    <img class="media-object img-thumbnail" src="{{target.Portrait}}">
-                </a>
+                <img class="media-object" src="{{target.Portrait}}">
             </div>
             <div class="media-body">
                 <h3 class="media-heading">{{target.NickName}}</h3>
                 {{#if isSelf}}
                 <p class="clearfix">
-                    <input type="text" value="{{target.Mood}}" class="txt-mood"/>
+                    <input type="text" value="{{target.Mood}}" class="txt-mood" placeholder="点击发表心情"/>
                     <button class="btn btn-save-mood hide">发表心情</button>
                 </p>
                 {{else}}
-                    <p class="clearfix">{{target.Mood}}</p>
+                <p class="clearfix">{{target.Mood}}</p>
                 {{/if}}
             </div>
         </div>
@@ -24,7 +22,7 @@
             <li><a href="/u{{target.UserId}}/article">文章</a></li>
             <li><a href="/u{{target.UserId}}/mood">心情</a></li>
             {{#if isSelf}}
-                <li><a href="/u{{target.UserId}}/collection">收藏</a></li>
+            <li><a href="/u{{target.UserId}}/collection">收藏</a></li>
             {{/if}}
             <li><a href="/u{{target.UserId}}/info">资料</a></li>
         </ul>

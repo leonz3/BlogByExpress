@@ -34,7 +34,7 @@
                         <div class="media-body">
                             <span class="pull-right">{{formatDate PublishTime}}</span>
                             <h4 class="media-heading">{{NickName}}</h4>
-                            {{#if ../isSelf}}
+                            {{#if ../isAuthor}}
                                 <a href="javascript:void(0);" class="pull-right hide btn-delete-comment" data-id="{{CommentId}}">删除该评论</a>
                             {{/if}}
                             <p>{{{Content}}}</p>

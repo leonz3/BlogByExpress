@@ -1,4 +1,3 @@
-
 require('../partial/header.js');
 require('../plugin/popup.js');
 
@@ -95,6 +94,83 @@ var Config = {
     }
 };
 
+var Password = {
+    run: function(){
+        var _this = this;
+        _this.show(function(){
+            try{
+                _this.getData().submit(function(result){
+                    if(result.error){
+                        if(result.message = 'wrong'){
+                            throw new Error('当前密码错误！')
+                        }else{
+                            throw new Error('密码修改失败！')
+                        }
+                    }else{
+                        alert('更改成功，请退出重新登录');
+                        $.popup().hide();
+                    }
+                });
+            }catch(e){
+                $('#popup_modal').find('p').html(e.message).removeClass('hide');
+            }
+        });
+    },
+    show: function (cb) {
+        $.popup({
+            title: '修改密码',
+            content: '<div class="clearfix"><div class="form-horizontal col-sm-10 col-sm-offset-1">'
+            + '<p class="text-danger text-center hide"></p>'
+            + '<div class="form-group"><input type="password" class="form-control txt-org-pwd" placeholder="当前密码" /></div>'
+            + '<div class="form-group"><input type="password" class="form-control txt-new-pwd" placeholder="新密码"/></div>'
+            + '<div class="form-group"><input type="password" class="form-control txt-new-repwd" placeholder="确认密码"/></div>'
+            + '</div></div>',
+            type: 'prompt',
+            yep: {
+                txt: '确定修改',
+                callback: cb
+            }
+        }).show();
+    },
+    getData: function(){
+        var url = window.location.pathname;
+        this.url = url.replace('config', 'password');
+        this.data =  {
+            orgPwd: function(){
+                var val = $('.txt-org-pwd').val().trim();
+                if(!val){
+                    throw new Error('请填写当前密码！');
+                }
+                return val;
+            }(),
+            newPwd: function(){
+                var val = $('.txt-new-pwd').val().trim();
+                var reVal = $('.txt-new-repwd').val().trim();
+                if(!val){
+                    throw new Error('请填写新密码！');
+                }else if(!reVal){
+                    throw new Error('请确认新密码！');
+                }else if(val !== reVal){
+                    throw new Error('确认密码不一致');
+                }
+                return val;
+            }()
+        };
+        return this;
+    },
+    submit: function (cb) {
+        var _this = this;
+        $.ajax({
+            url: _this.url,
+            data: _this.data,
+            type: 'post',
+            success: function (result) {
+                cb(result);
+            }
+        })
+    }
+}
+
 var Popup = function (msg) {
     $.popup({
         title: '提示',
@@ -120,7 +196,8 @@ var Upload = function () {
             }
         }
     });
-}
+};
+
 
 ~function () {
 
@@ -143,5 +220,9 @@ var Upload = function () {
 
     $('.btn-file').on('change', function () {
         Upload.call(this);
+    });
+
+    $('.btn-edit-password').on('click', function(){
+        Password.run();
     });
 }();

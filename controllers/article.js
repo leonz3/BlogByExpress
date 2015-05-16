@@ -14,22 +14,25 @@ exports.detail = function (req, res) {
         var article = new Article((yield Article.fetchById(id))[0]);
         var statistics = yield article.getStatistics();
         var comments = yield Comment.fetchsByRootId(id);
-        var userHandler = yield article.isOperateByUser(1);
+        //var userHandler = yield article.isOperateByUser();
         var topList = yield Article.getTopList(days);
         if (user) {
-            var isSelf = user.UserId == article.UserId ? true : false;
+            var uid = user.UserId;
+            var userHandler = yield article.isOperateByUser(uid);
+            var isAuthor = uid == article.UserId ? true : false;
         } else {
-            var isSelf = false;
+            var isAuthor = false;
         }
         article.scanned();
         res.render('article/detail', {
+            title: article.Title,
             self: user,
             article: article,
             comments: comments,
             statist: statistics,
             topList: topList,
             userHandler: userHandler,
-            isSelf: isSelf
+            isAuthor: isAuthor
         });
     });
 };
@@ -42,15 +45,18 @@ exports.edit = function (req, res) {
     var article = null;
     if (/^\d+$/g.test(id)) {
         Article.fetchById(id).then(function (result) {
+            var article = new Article(result[0]);
             if (result.length > 0) {
                 res.render('article/edit', {
+                    title: article.Title,
                     self: req.session.self,
-                    article: result[0]
+                    article: article
                 })
             }
         });
     } else {
         res.render('article/edit', {
+            title: '发表新文章',
             self: req.session.self
         });
     }

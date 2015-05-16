@@ -34,6 +34,7 @@ module.exports = function (app) {
     app.get('/u:id/collection/:index?', user.collection);
     app.get('/user/isExists', user.isExistsUser);
     app.post('/u:id/config', user.saveConfig);
+    app.post('/u:id/password', user.updatePassword);
 
     /**
      * aritcle
@@ -67,21 +68,21 @@ module.exports = function (app) {
      * catch 404 and forward to handler
      */
     app.use(function (req, res, next) {
-        var err = new Error('Not Found');
-        err.state = 404;
-        next(err);
+        //var err = new Error('Not Found');
+        //err.state = 404;
+        //next(err);
     });
 
     /**
      * err handle
      */
     app.use(function (err, req, res) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            //development or production
-            error: app.get('env') === 'development' ? err : {}
-        });
+        //res.status(err.status || 500);
+        //res.render('error', {
+        //    message: err.message,
+        //    //development or production
+        //    error: app.get('env') === 'development' ? err : {}
+        //});
     });
 }
 

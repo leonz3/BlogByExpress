@@ -24,6 +24,7 @@ exports.index = function (req, res, next) {
                 var articles = yield Article.fetchsByCategory(cid, 1);
                 var topList = yield Article.getTopList(days);
                 res.render('home/index', {
+                    title: 'Fade2Coding',
                     self: req.session.self,
                     articles: articles,
                     topList: topList
@@ -58,6 +59,7 @@ exports.search = function (req, res) {
             var articles = yield Article.fetchsByKey(key);
             var topList = yield Article.getTopList(days);
             res.render('home/index', {
+                title: key,
                 self: req.session.self,
                 articles: articles,
                 topList: topList
